@@ -6,65 +6,79 @@
     <title>商品分期申請平台</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; color: #333; }
-        .container { max-width: 500px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: auto; }
-        h2 { color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px; margin-top: 0; }
-        h3 { background: #eef2f3; padding: 10px; border-left: 5px solid #27ae60; margin-top: 20px; font-size: 16px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        .submit-btn { background: #27ae60; color: white; width: 100%; padding: 15px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        body { font-family: -apple-system, sans-serif; background-color: #f8f9fa; margin: 0; padding: 15px; }
+        .container { max-width: 100%; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { color: #004a87; border-left: 5px solid #28a745; padding-left: 10px; margin-bottom: 20px; }
+        .section-title { background: #e9ecef; padding: 8px 12px; font-weight: bold; margin-top: 20px; border-radius: 4px; }
+        .form-group { margin-top: 15px; }
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: #444; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .submit-btn { background: #28a745; color: white; width: 100%; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>分期申請表單</h2>
-    <p>請填寫以下真實資料，以利加速審核進度。</p>
-    
-    <h3>一、個人基本資料</h3>
+    <p style="font-size: 13px; color: #666;">請填寫以下完整資料，以加快審核進度。</p>
+
+    <div class="section-title">一、個人基本資料</div>
     <div class="form-group"><label>全名</label><input type="text" id="name" placeholder="請輸入真實姓名"></div>
     <div class="form-group"><label>出生年月日</label><input type="text" id="birthday" placeholder="範例：71/09/24"></div>
     <div class="form-group"><label>身分證字號</label><input type="text" id="id_num" placeholder="請輸入身分證字號"></div>
+    <div class="form-group"><label>最高學歷</label><select id="edu"><option>高職</option><option>國中</option><option>高中</option><option>大專</option><option>大學以上</option></select></div>
     <div class="form-group"><label>手機號碼</label><input type="tel" id="mobile" placeholder="09xxxxxxxx"></div>
+    <div class="form-group"><label>方便聯絡時間</label><input type="text" id="c_time" placeholder="例如：13:00~15:00"></div>
+    <div class="form-group"><label>電信業者</label><input type="text" id="tel_co" placeholder="例如：中華電信"></div>
+    <div class="form-group"><label>常用 Email</label><input type="email" id="email" placeholder="example@gmail.com"></div>
+
+    <div class="section-title">二、居住狀況</div>
+    <div class="form-group"><label>戶籍地址</label><input type="text" id="h_addr"></div>
+    <div class="form-group"><label>戶籍電話</label><input type="text" id="h_tel"></div>
+    <div class="form-group"><label>現居地址</label><input type="text" id="c_addr"></div>
+    <div class="form-group"><label>現居地居住時間</label><input type="text" id="live_time" placeholder="例如：5年"></div>
+    <div class="form-group"><label>居住持有狀況</label><select id="h_type"><option>親友持有</option><option>自有</option><option>租賃</option></select></div>
+
+    <div class="section-title">三、工作資訊</div>
+    <div class="form-group"><label>公司名稱</label><input type="text" id="comp"></div>
+    <div class="form-group"><label>公司電話</label><input type="text" id="comp_tel"></div>
+    <div class="form-group"><label>職稱</label><input type="text" id="job"></div>
+    <div class="form-group"><label>月收入</label><input type="number" id="income" placeholder="例如：35000"></div>
+    <div class="form-group"><label>年資</label><input type="text" id="seniority"></div>
+
+    <div class="section-title">四、聯絡人資訊 (一)</div>
+    <div class="form-group"><label>姓名</label><input type="text" id="ref1_name"></div>
+    <div class="form-group"><label>關係</label><input type="text" id="ref1_rel"></div>
+    <div class="form-group"><label>電話</label><input type="tel" id="ref1_tel"></div>
+
+    <div class="section-title">五、聯絡人資訊 (二)</div>
+    <div class="form-group"><label>姓名</label><input type="text" id="ref2_name"></div>
+    <div class="form-group"><label>關係</label><input type="text" id="ref2_rel"></div>
+    <div class="form-group"><label>電話</label><input type="tel" id="ref2_tel"></div>
 
     <button class="submit-btn" onclick="sendToLine()">確認送出申請</button>
 </div>
 
 <script>
-    // 初始化 LIFF
-    async function initLiff() {
-        try {
-            await liff.init({ liffId: "2008759894-DkxBFgJp" }); // <--- 這裡記得換掉
-            if (!liff.isLoggedIn()) {
-                liff.login();
-            }
-        } catch (error) {
-            console.error('LIFF 初始化失敗', error);
-        }
-    }
-    initLiff();
+    // 這裡要換成你的 LIFF ID
+    const myLiffId = "2008759894-DkxBFgJp";
+
+    liff.init({ liffId: myLiffId }).then(() => {
+        if (!liff.isLoggedIn()) { liff.login(); }
+    }).catch(err => console.error("LIFF 初始化失敗", err));
 
     function sendToLine() {
         const name = document.getElementById('name').value;
-        const mobile = document.getElementById('mobile').value;
+        if (!name) { alert("請填寫姓名"); return; }
 
-        if (!name || !mobile) {
-            alert("請完整填寫姓名與電話");
-            return;
-        }
+        const message = `【新件申請報告】\n姓名：${name}\n電話：${document.getElementById('mobile').value}\n身分證：${document.getElementById('id_num').value}\n居住地：${document.getElementById('c_addr').value}\n工作：${document.getElementById('comp').value}\n(其餘詳細資料已記錄)`;
 
-        const message = `【新件申請表單】\n姓名：${name}\n電話：${mobile}\n生日：${document.getElementById('birthday').value}\n身分證：${document.getElementById('id_num').value}`;
-
-        liff.sendMessages([{
-            type: 'text',
-            text: message
-        }]).then(() => {
-            alert("申請資料已傳送！");
-            liff.closeWindow();
-        }).catch((err) => {
-            alert("傳送失敗，請確認是否給予權限: " + err);
-        });
+        liff.sendMessages([{ type: 'text', text: message }])
+            .then(() => {
+                alert("申請資料已送出！");
+                liff.closeWindow();
+            })
+            .catch(err => alert("傳送失敗，請確認 Scopes 是否開啟 chat_message.write"));
     }
 </script>
 
