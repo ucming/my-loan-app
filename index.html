@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品分期申請平台</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 500px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h3 { background: #eef2f3; padding: 10px; border-left: 5px solid #3498db; margin-top: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .upload-btn { background: #95a5a6; color: white; padding: 10px; text-align: center; border-radius: 6px; cursor: pointer; display: block; margin-top: 5px; }
+        .submit-btn { background: #27ae60; color: white; width: 100%; padding: 15px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
+        .submit-btn:hover { background: #219150; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>分期申請表單</h2>
+    <p>請填寫以下真實資料，以利加速審核進度。</p>
+
+    <h3>一、個人基本資料</h3>
+    <div class="form-group">
+        <label>全名</label>
+        <input type="text" id="name" placeholder="請輸入真實姓名">
+    </div>
+    <div class="form-group">
+        <label>出生年月日</label>
+        <input type="text" id="birthday" placeholder="範例：71/09/24">
+    </div>
+    <div class="form-group">
+        <label>身分證字號</label>
+        <input type="text" id="id_card" placeholder="請輸入身分證字號">
+    </div>
+    <div class="form-group">
+        <label>最高學歷</label>
+        <select id="education">
+            <option>高職</option><option>國中</option><option>高中</option><option>大專</option><option>大學以上</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>手機號碼</label>
+        <input type="tel" id="phone" placeholder="09xxxxxxxx">
+    </div>
+    <div class="form-group">
+        <label>方便聯絡時間</label>
+        <input type="text" id="contact_time" placeholder="例如：13:00~15:00">
+    </div>
+    <div class="form-group">
+        <label>電信業者</label>
+        <select id="telecom">
+            <option>台灣大哥大</option><option>中華電信</option><option>遠傳電信</option><option>台灣之星</option><option>亞太電信</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="jikey.su@gmail.com">
+    </div>
+
+    <h3>二、居住狀況</h3>
+    <div class="form-group"><label>戶籍地址</label><input type="text" id="h_address"></div>
+    <div class="form-group"><label>戶籍電話</label><input type="text" id="h_phone"></div>
+    <div class="form-group"><label>現居地址</label><input type="text" id="c_address"></div>
+    <div class="form-group"><label>現居地電話</label><input type="text" id="c_phone"></div>
+    <div class="form-group"><label>現居地居住時間</label><input type="text" id="live_year" placeholder="例如：13年"></div>
+    <div class="form-group">
+        <label>居住地持有狀況</label>
+        <select id="house_status">
+            <option>親友持有</option><option>自有</option><option>租賃</option><option>公司宿舍</option>
+        </select>
+    </div>
+
+    <h3>三、工作資訊</h3>
+    <div class="form-group"><label>公司名稱</label><input type="text" id="comp_name"></div>
+    <div class="form-group"><label>公司電話</label><input type="text" id="comp_phone"></div>
+    <div class="form-group"><label>公司地址</label><input type="text" id="comp_address"></div>
+    <div class="form-group"><label>職稱</label><input type="text" id="job_title"></div>
+    <div class="form-group"><label>薪資收入</label><input type="number" id="salary"></div>
+    <div class="form-group">
+        <label>有無薪轉勞保</label>
+        <select id="insurance"><option>有</option><option>無</option></select>
+    </div>
+    <div class="form-group"><label>年資</label><input type="text" id="job_year"></div>
+
+    <h3>四、聯絡人資訊 (必填兩位)</h3>
+    <label>【聯絡人 1】</label>
+    <div class="form-group"><input type="text" id="ref1_name" placeholder="姓名"></div>
+    <div class="form-group"><input type="text" id="ref1_rel" placeholder="關係"></div>
+    <div class="form-group"><input type="tel" id="ref1_phone" placeholder="電話"></div>
+    <div class="form-group">
+        <select id="ref1_type"><option>保密照會</option><option>公開知情</option></select>
+    </div>
+
+    <label>【聯絡人 2】</label>
+    <div class="form-group"><input type="text" id="ref2_name" placeholder="姓名"></div>
+    <div class="form-group"><input type="text" id="ref2_rel" placeholder="關係"></div>
+    <div class="form-group"><input type="tel" id="ref2_phone" placeholder="電話"></div>
+    <div class="form-group">
+        <select id="ref2_type"><option>保密照會</option><option>公開知情</option></select>
+    </div>
+
+    <h3>五、證件附件</h3>
+    <label>身分證正面</label>
+    <input type="file" accept="image/*" id="file_id_front">
+    <label style="margin-top:10px">身分證反面</label>
+    <input type="file" accept="image/*" id="file_id_back">
+
+    <button class="submit-btn" onclick="sendData()">送出分期申請</button>
+</div>
+
+<script>
+    // 初始化 LINE LIFF
+    liff.init({ liffId: "你的LIFF_ID_填在這裡" }).then(() => {
+        if (!liff.isLoggedIn()) {
+            liff.login();
+        }
+    });
+
+    function sendData() {
+        const name = document.getElementById('name').value;
+        if (!name) { alert("請填寫姓名"); return; }
+        
+        // 這裡會把資料包起來傳送給 LINE Bot
+        const message = `【新分期申請單】\n姓名：${name}\n電話：${document.getElementById('phone').value}\n公司：${document.getElementById('comp_name').value}`;
+        
+        liff.sendMessages([{
+            type: 'text',
+            text: message
+        }]).then(() => {
+            alert("申請已送出！我們會盡快聯絡您。");
+            liff.closeWindow();
+        }).catch((err) => {
+            console.error(err);
+            alert("傳送失敗，請確認權限設定。");
+        });
+    }
+</script>
+
+</body>
+</html>
