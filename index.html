@@ -15,6 +15,7 @@
         label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #333; }
         label span { color: red; }
         input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
+        input:focus { border-color: var(--primary); outline: none; }
         .contact-card { background: #fffcf5; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-top: 15px; }
         .submit-btn { background: var(--secondary); color: white; width: 100%; padding: 18px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 30px; cursor: pointer; }
     </style>
@@ -29,10 +30,10 @@
     <div class="form-group"><label>出生年月日 <span>*</span></label><input type="text" id="birthday" placeholder="例：82/11/1"></div>
     <div class="form-group"><label>身分證字號 <span>*</span></label><input type="text" id="id_num" placeholder="例：U123456789"></div>
     <div class="form-group"><label>最高學歷 <span>*</span></label><input type="text" id="edu" placeholder="例：高中"></div>
-    <div class="form-group"><label>手機號碼 <span>*</span></label><input type="tel" id="mobile" placeholder="例：0912345678"></div>
+    <div class="form-group"><label>手機號碼 <span>*</span></label><input type="text" id="mobile" placeholder="例：0912345678"></div>
     <div class="form-group"><label>方便聯絡時間 <span>*</span></label><input type="text" id="c_time" placeholder="例：1200-1300"></div>
     <div class="form-group"><label>電信業者 <span>*</span></label><input type="text" id="tel_co" placeholder="例：台灣大哥大"></div>
-    <div class="form-group"><label>Email <span>*</span></label><input type="email" id="email" placeholder="例：test@gmail.com"></div>
+    <div class="form-group"><label>Email <span>*</span></label><input type="text" id="email" placeholder="例：test@gmail.com"></div>
 
     <div class="section-header">二、居住狀況</div>
     <div class="form-group"><label>戶籍地址 <span>*</span></label><input type="text" id="h_addr"></div>
@@ -40,14 +41,21 @@
     <div class="form-group"><label>現居地址 <span>*</span></label><input type="text" id="c_addr" placeholder="同戶籍請填同戶籍"></div>
     <div class="form-group"><label>現居地電話 <span>*</span></label><input type="text" id="c_tel" placeholder="無則填無"></div>
     <div class="form-group"><label>現居地居住時間 <span>*</span></label><input type="text" id="h_year" placeholder="例：20年"></div>
-    <div class="form-group"><label>居住地持有狀況 <span>*</span></label><select id="h_type"><option value="">請選擇</option><option>自有</option><option>租賃</option><option>親友持有</option></select></div>
+    <div class="form-group"><label>居住地持有狀況 <span>*</span></label>
+        <select id="h_type">
+            <option value="">請選擇</option>
+            <option value="自有">自有</option>
+            <option value="租賃">租賃</option>
+            <option value="親友持有">親友持有</option>
+        </select>
+    </div>
 
     <div class="section-header">三、工作資訊</div>
     <div class="form-group"><label>公司名稱 <span>*</span></label><input type="text" id="comp"></div>
     <div class="form-group"><label>公司電話 <span>*</span></label><input type="text" id="comp_tel"></div>
     <div class="form-group"><label>公司地址 <span>*</span></label><input type="text" id="comp_addr"></div>
     <div class="form-group"><label>公司職稱 <span>*</span></label><input type="text" id="job"></div>
-    <div class="form-group"><label>薪資收入 <span>*</span></label><input type="number" id="income"></div>
+    <div class="form-group"><label>薪資收入 <span>*</span></label><input type="text" id="income" placeholder="例：51000"></div>
     <div class="form-group"><label>有無薪轉勞保 <span>*</span></label><input type="text" id="insur" placeholder="例：有"></div>
     <div class="form-group"><label>工作年資 <span>*</span></label><input type="text" id="job_year" placeholder="例：8年"></div>
 
@@ -55,8 +63,10 @@
     <div class="contact-card">
         <div class="form-group"><label>聯絡人1姓名 <span>*</span></label><input type="text" id="r1_n"></div>
         <div class="form-group"><label>與聯絡人1關係 <span>*</span></label><input type="text" id="r1_r"></div>
-        <div class="form-group"><label>聯絡人1手機號碼 <span>*</span></label><input type="tel" id="r1_t"></div>
-        <div class="form-group"><label>公開知情 / 保密照會 <span>*</span></label><select id="r1_s"><option>保密照會</option><option>公開知情</option></select></div>
+        <div class="form-group"><label>聯絡人1手機號碼 <span>*</span></label><input type="text" id="r1_t"></div>
+        <div class="form-group"><label>公開知情 / 保密照會 <span>*</span></label>
+            <select id="r1_s"><option value="保密照會">保密照會</option><option value="公開知情">公開知情</option></select>
+        </div>
         <div class="form-group"><label>方便聯絡時間 <span>*</span></label><input type="text" id="r1_time" placeholder="例：都可"></div>
     </div>
 
@@ -64,8 +74,10 @@
     <div class="contact-card" style="border-left: 5px solid #ff9800;">
         <div class="form-group"><label>聯絡人2姓名 <span>*</span></label><input type="text" id="r2_n"></div>
         <div class="form-group"><label>與聯絡人2關係 <span>*</span></label><input type="text" id="r2_r"></div>
-        <div class="form-group"><label>聯絡人2手機號碼 <span>*</span></label><input type="tel" id="r2_t"></div>
-        <div class="form-group"><label>公開 / 保密照會 <span>*</span></label><select id="r2_s"><option>保密照會</option><option>公開知情</option></select></div>
+        <div class="form-group"><label>聯絡人2手機號碼 <span>*</span></label><input type="text" id="r2_t"></div>
+        <div class="form-group"><label>公開 / 保密照會 <span>*</span></label>
+            <select id="r2_s"><option value="保密照會">保密照會</option><option value="公開知情">公開知情</option></select>
+        </div>
         <div class="form-group"><label>方便聯絡時間 <span>*</span></label><input type="text" id="r2_time" placeholder="例：都可以"></div>
     </div>
 
@@ -77,10 +89,10 @@
 
     liff.init({ liffId: LIFF_ID }).then(() => {
         if (!liff.isLoggedIn()) liff.login();
-    });
+    }).catch(err => console.error(err));
 
     function send() {
-        // 取得所有欄位 ID
+        // 所有必填 ID 列表
         const fields = [
             'name', 'birthday', 'id_num', 'edu', 'mobile', 'c_time', 'tel_co', 'email',
             'h_addr', 'h_tel', 'c_addr', 'c_tel', 'h_year', 'h_type',
@@ -89,11 +101,16 @@
             'r2_n', 'r2_r', 'r2_t', 'r2_s', 'r2_time'
         ];
 
+        // 檢查必填並標註紅框
         for (let id of fields) {
-            if (!document.getElementById(id).value) {
-                alert("漏填警告：所有欄位皆為必填！請檢查完整。");
-                document.getElementById(id).focus();
+            const el = document.getElementById(id);
+            if (!el.value.trim()) {
+                alert("標示 * 的欄位必須完整填寫！");
+                el.style.borderColor = "red";
+                el.focus();
                 return;
+            } else {
+                el.style.borderColor = "#ccc";
             }
         }
 
@@ -130,9 +147,11 @@ Email: ${document.getElementById('email').value}
 方便聯絡時間: ${document.getElementById('r2_time').value}`;
 
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            alert("完整資料已送出！");
+            alert("完整資料已成功傳送！");
             liff.closeWindow();
-        }).catch(e => alert("傳送失敗"));
+        }).catch(err => {
+            alert("傳送失敗，請確認是否允許傳送訊息權限。");
+        });
     }
 </script>
 
