@@ -6,54 +6,67 @@
     <title>商品分期申請平台</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; color: #333; }
         .container { max-width: 500px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin: auto; }
-        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px; margin-top: 0; }
+        h3 { background: #eef2f3; padding: 10px; border-left: 5px solid #27ae60; margin-top: 20px; font-size: 16px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #218838; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .submit-btn { background: #27ae60; color: white; width: 100%; padding: 15px; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>商品分期申請表單</h2>
-        <form id="loanForm">
-            <div class="form-group">
-                <label>申請人全名</label>
-                <input type="text" id="name" placeholder="請輸入真實姓名" required>
-            </div>
-            <div class="form-group">
-                <label>聯絡電話</label>
-                <input type="tel" id="phone" placeholder="請輸入手機號碼" required>
-            </div>
-            <button type="submit">確認送出申請</button>
-        </form>
-    </div>
 
-    <script>
-        async function main() {
-            // 初始化 LIFF，ID 已填入
-            await liff.init({ liffId: "2008759894-DkxBFgJp" }); 
+<div class="container">
+    <h2>分期申請表單</h2>
+    <p>請填寫以下真實資料，以利加速審核進度。</p>
+    
+    <h3>一、個人基本資料</h3>
+    <div class="form-group"><label>全名</label><input type="text" id="name" placeholder="請輸入真實姓名"></div>
+    <div class="form-group"><label>出生年月日</label><input type="text" id="birthday" placeholder="範例：71/09/24"></div>
+    <div class="form-group"><label>身分證字號</label><input type="text" id="id_num" placeholder="請輸入身分證字號"></div>
+    <div class="form-group"><label>手機號碼</label><input type="tel" id="mobile" placeholder="09xxxxxxxx"></div>
 
-            document.getElementById('loanForm').onsubmit = async function(e) {
-                e.preventDefault();
-                const name = document.getElementById('name').value;
-                const phone = document.getElementById('phone').value;
-                const message = `🔔 您有新的分期申請！\n━━━━━━━━━━━\n👤 姓名：${name}\n📞 電話：${phone}\n━━━━━━━━━━━`;
+    <button class="submit-btn" onclick="sendToLine()">確認送出申請</button>
+</div>
 
-                try {
-                    // 將申請資訊傳送到 LINE 聊天室
-                    await liff.sendMessages([{ type: 'text', text: message }]);
-                    alert('申請已成功送出！專員將盡快與您聯絡。');
-                    liff.closeWindow(); // 傳完訊息自動關閉視窗
-                } catch (error) {
-                    alert('傳送失敗！請確保您是從 LINE App 中開啟此連結。');
-                }
-            };
+<script>
+    // 初始化 LIFF
+    async function initLiff() {
+        try {
+            await liff.init({ liffId: "你的LIFF_ID" }); // <--- 這裡記得換掉
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            }
+        } catch (error) {
+            console.error('LIFF 初始化失敗', error);
         }
-        main();
-    </script>
+    }
+    initLiff();
+
+    function sendToLine() {
+        const name = document.getElementById('name').value;
+        const mobile = document.getElementById('mobile').value;
+
+        if (!name || !mobile) {
+            alert("請完整填寫姓名與電話");
+            return;
+        }
+
+        const message = `【新件申請表單】\n姓名：${name}\n電話：${mobile}\n生日：${document.getElementById('birthday').value}\n身分證：${document.getElementById('id_num').value}`;
+
+        liff.sendMessages([{
+            type: 'text',
+            text: message
+        }]).then(() => {
+            alert("申請資料已傳送！");
+            liff.closeWindow();
+        }).catch((err) => {
+            alert("傳送失敗，請確認是否給予權限: " + err);
+        });
+    }
+</script>
+
 </body>
 </html>
