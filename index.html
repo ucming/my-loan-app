@@ -16,6 +16,7 @@
         label span { color: red; }
         input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: white; }
         .btn { background: var(--s); color: white; width: 100%; padding: 20px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; }
+        .btn:disabled { background: #ccc; }
     </style>
 </head>
 <body>
@@ -72,16 +73,23 @@
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v29" placeholder="例：0977654321"></div>
     <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v30" placeholder="例：晚上七點後"></div>
 
-    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="closeAfterSelect()">
+    <input type="file" id="photoInput" accept="image/*" style="position: absolute; width: 1px; height: 1px; opacity: 0;">
 
-    <button class="btn" onclick="checkAndSend()">確認送出並開啟拍照</button>
+    <button id="submitBtn" class="btn" onclick="checkAndSend()">確認送出並開啟拍照</button>
 </div>
 
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
     liff.init({ liffId: LIFF_ID }).then(() => { if (!liff.isLoggedIn()) liff.login(); });
 
+    // 當客戶選完照片後，再關閉視窗
+    document.getElementById('photoInput').onchange = function() {
+        alert("照片選取成功！請回到 LINE 對話框按下「傳送」。");
+        liff.closeWindow();
+    };
+
     function checkAndSend() {
+        const btn = document.getElementById('submitBtn');
         const fields = [
             {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
             {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'}, {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, 
@@ -91,27 +99,33 @@
             {id:'v27', n:'聯絡2姓名'}, {id:'v28', n:'聯絡2關係'}, {id:'v29', n:'聯絡2電話'}, {id:'v30', n:'聯絡2照會時間'}
         ];
 
-        // 檢查欄位
         for (let f of fields) {
-            if (!document.getElementById(f.id).value) { alert("「" + f.n + "」尚未填寫！"); document.getElementById(f.id).focus(); return; }
+            if (!document.getElementById(f.id).value) { 
+                alert("「" + f.n + "」尚未填寫！"); 
+                document.getElementById(f.id).focus(); 
+                return; 
+            }
         }
 
-        // 組合訊息文字
+        btn.disabled = true;
+        btn.innerText = "正在記錄資料...";
+
         let msg = "【新件正式申請單】\n";
         fields.forEach(f => { msg += `${f.n}：${document.getElementById(f.id).value}\n`; });
         msg += "\n⚠️ 客戶即將傳送身分證照片，請注意接收。";
 
-        // 先傳送文字訊息，成功後再彈出相機選單
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            alert("文字資料已記錄！請選擇「相機」拍照或「相簿」上傳身分證。");
-            document.getElementById('photoInput').click(); 
-        }).catch(e => alert("傳送失敗，請確認權限"));
-    }
-
-    // 當客戶選完照片或拍完照後執行的動作
-    function closeAfterSelect() {
-        alert("照片選取完成！請手動在對話框中按「傳送」給我們，表單即將關閉。");
-        liff.closeWindow();
+            // 資料發送成功後，直接點擊隱藏的檔案輸入框
+            // 在這之前不彈出 alert，以免阻礙系統彈窗
+            document.getElementById('photoInput').click();
+            
+            // 修改按鈕狀態引導客戶
+            btn.innerText = "請完成拍照/選取照片";
+        }).catch(e => {
+            alert("發送失敗，請重試");
+            btn.disabled = false;
+            btn.innerText = "確認送出並開啟拍照";
+        });
     }
 </script>
 </body>
