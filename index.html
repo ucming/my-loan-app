@@ -3,71 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品分期申請平台 (完整版)</title>
+    <title>商品分期申請平台 (正式版)</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        body { font-family: -apple-system, sans-serif; background-color: #f8f9fa; margin: 0; padding: 15px; }
-        .container { max-width: 100%; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h2 { color: #004a87; border-left: 5px solid #28a745; padding-left: 10px; margin-bottom: 20px; }
-        .section-title { background: #e9ecef; padding: 10px; font-weight: bold; margin-top: 25px; border-radius: 4px; color: #333; }
+        body { font-family: -apple-system, "Microsoft JhengHei", sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; color: #333; }
+        .container { max-width: 100%; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h2 { color: #004a87; text-align: center; margin-bottom: 5px; }
+        p.subtitle { text-align: center; font-size: 13px; color: #666; margin-bottom: 25px; }
+        .section-title { background: #eef2f3; padding: 10px 15px; font-weight: bold; margin-top: 25px; border-left: 5px solid #28a745; border-radius: 4px; color: #2c3e50; }
         .form-group { margin-top: 15px; }
-        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: #444; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        .upload-box { border: 2px dashed #28a745; padding: 20px; text-align: center; border-radius: 8px; margin-top: 10px; cursor: pointer; background: #f0fff4; }
-        .submit-btn { background: #28a745; color: white; width: 100%; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 30px; cursor: pointer; }
-        .preview-img { width: 100%; margin-top: 10px; border-radius: 8px; display: none; }
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #555; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
+        input:focus { border-color: #28a745; box-shadow: 0 0 5px rgba(40,167,69,0.2); }
+        .upload-area { border: 2px dashed #28a745; padding: 20px; text-align: center; border-radius: 10px; margin-top: 10px; cursor: pointer; background: #f9fffb; transition: 0.3s; }
+        .upload-area:active { background: #e8f5e9; }
+        .preview-img { width: 100%; margin-top: 15px; border-radius: 10px; display: none; border: 1px solid #ddd; }
+        .submit-btn { background: #28a745; color: white; width: 100%; padding: 18px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; box-shadow: 0 4px 10px rgba(40,167,69,0.3); }
+        .submit-btn:active { background: #218838; transform: translateY(2px); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>分期申請表單</h2>
+    <p class="subtitle">請填寫完整資訊，以利快速審核進度</p>
     
     <div class="section-title">一、個人基本資料</div>
-    <div class="form-group"><label>全名</label><input type="text" id="name" placeholder="請輸入姓名"></div>
+    <div class="form-group"><label>全名</label><input type="text" id="name" placeholder="範例：王大明"></div>
     <div class="form-group"><label>手機號碼</label><input type="tel" id="mobile" placeholder="09xxxxxxxx"></div>
-    <div class="form-group"><label>出生年月日</label><input type="text" id="birthday" placeholder="例：71/09/24"></div>
+    <div class="form-group"><label>出生年月日</label><input type="text" id="birthday" placeholder="例：75/10/20"></div>
     <div class="form-group"><label>身分證字號</label><input type="text" id="id_num" placeholder="請輸入身分證號"></div>
-    <div class="form-group"><label>最高學歷</label><select id="edu"><option>高職</option><option>國中</option><option>高中</option><option>大專</option><option>大學以上</option></select></div>
-    <div class="form-group"><label>電信業者</label><input type="text" id="tel_co"></div>
+    <div class="form-group"><label>最高學歷</label>
+        <select id="edu"><option>請選擇</option><option>國中</option><option>高中/職</option><option>大專</option><option>大學以上</option></select>
+    </div>
+    <div class="form-group"><label>電信業者</label><input type="text" id="tel_co" placeholder="例：中華電信"></div>
+    <div class="form-group"><label>常用 Email</label><input type="email" id="email" placeholder="example@mail.com"></div>
 
     <div class="section-title">二、居住狀況</div>
     <div class="form-group"><label>戶籍地址</label><input type="text" id="h_addr"></div>
     <div class="form-group"><label>現居地址</label><input type="text" id="c_addr"></div>
-    <div class="form-group"><label>居住持有狀況</label><select id="h_type"><option>親友持有</option><option>自有</option><option>租賃</option></select></div>
+    <div class="form-group"><label>居住持有狀況</label>
+        <select id="h_type"><option>請選擇</option><option>自有</option><option>親友持有</option><option>租賃</option></select>
+    </div>
 
     <div class="section-title">三、工作資訊</div>
     <div class="form-group"><label>公司名稱</label><input type="text" id="comp"></div>
     <div class="form-group"><label>職稱</label><input type="text" id="job"></div>
-    <div class="form-group"><label>月收入</label><input type="number" id="income"></div>
+    <div class="form-group"><label>月收入</label><input type="number" id="income" placeholder="例：35000"></div>
+    <div class="form-group"><label>年資</label><input type="text" id="seniority" placeholder="例：2年3個月"></div>
 
-    <div class="section-title">四、身分證件上傳</div>
-    <label>身分證【正面】</label>
-    <div class="upload-box" onclick="document.getElementById('img_front').click()">點擊拍照或上傳正面</div>
-    <input type="file" id="img_front" accept="image/*" style="display:none" onchange="preview(this, 'p_front')">
-    <img id="p_front" class="preview-img">
+    <div class="section-title">四、證件拍照上傳</div>
+    <div class="form-group">
+        <label>身分證【正面】</label>
+        <div class="upload-area" onclick="document.getElementById('img_front').click()">📷 點擊拍攝正面</div>
+        <input type="file" id="img_front" accept="image/*" style="display:none" onchange="handlePreview(this, 'p_front')">
+        <img id="p_front" class="preview-img">
+    </div>
 
-    <label style="margin-top:15px">身分證【反面】</label>
-    <div class="upload-box" onclick="document.getElementById('img_back').click()">點擊拍照或上傳反面</div>
-    <input type="file" id="img_back" accept="image/*" style="display:none" onchange="preview(this, 'p_back')">
-    <img id="p_back" class="preview-img">
+    <div class="form-group" style="margin-top:20px;">
+        <label>身分證【反面】</label>
+        <div class="upload-area" onclick="document.getElementById('img_back').click()">📷 點擊拍攝反面</div>
+        <input type="file" id="img_back" accept="image/*" style="display:none" onchange="handlePreview(this, 'p_back')">
+        <img id="p_back" class="preview-img">
+    </div>
 
-    <div class="section-title">五、聯絡人資訊</div>
+    <div class="section-title">五、聯絡人資訊 (一)</div>
     <div class="form-group"><label>聯絡人1 姓名</label><input type="text" id="ref1_name"></div>
+    <div class="form-group"><label>聯絡人1 關係</label><input type="text" id="ref1_rel"></div>
     <div class="form-group"><label>聯絡人1 電話</label><input type="tel" id="ref1_tel"></div>
 
-    <button class="submit-btn" onclick="sendToLine()">確認送出申請</button>
+    <div class="section-title">六、聯絡人資訊 (二)</div>
+    <div class="form-group"><label>聯絡人2 姓名</label><input type="text" id="ref2_name"></div>
+    <div class="form-group"><label>聯絡人2 關係</label><input type="text" id="ref2_rel"></div>
+    <div class="form-group"><label>聯絡人2 電話</label><input type="tel" id="ref2_tel"></div>
+
+    <button class="submit-btn" onclick="submitData()">確認送出申請</button>
 </div>
 
 <script>
-    // 請務必把下面這行換成你的 LIFF ID
-    const myLiffId = "2008759894-DkxBFgJp";
+    // ⚠ 重要：請務必在此填入你的真實 LIFF ID
+    const MY_LIFF_ID = "2008759894-DkxBFgJp";
 
-    liff.init({ liffId: myLiffId }).then(() => {
-        if (!liff.isLoggedIn()) { liff.login(); }
-    });
+    liff.init({ liffId: MY_LIFF_ID }).then(() => {
+        if (!liff.isLoggedIn()) {
+            liff.login();
+        }
+    }).catch(err => console.error("LIFF 初始化錯誤", err));
 
-    function preview(input, imgId) {
+    function handlePreview(input, imgId) {
         const file = input.files[0];
         if (file) {
             const reader = new FileReader();
@@ -80,18 +103,35 @@
         }
     }
 
-    function sendToLine() {
+    function submitData() {
         const name = document.getElementById('name').value;
-        if (!name) { alert("請填寫姓名"); return; }
+        const mobile = document.getElementById('mobile').value;
+        
+        if (!name || !mobile) {
+            alert("請至少填寫姓名與電話！");
+            return;
+        }
 
-        const msg = `【新件申請】\n姓名：${name}\n電話：${document.getElementById('mobile').value}\n居住地：${document.getElementById('c_addr').value}\n工作：${document.getElementById('comp').value}\n(證件已附件於後台)`;
+        // 彙整訊息內容
+        const report = `【新件申請通知】\n` +
+                       `姓名：${name}\n` +
+                       `電話：${mobile}\n` +
+                       `身分證：${document.getElementById('id_num').value}\n` +
+                       `月收入：${document.getElementById('income').value}\n` +
+                       `聯絡人1：${document.getElementById('ref1_name').value}(${document.getElementById('ref1_rel').value})\n` +
+                       `聯絡人2：${document.getElementById('ref2_name').value}(${document.getElementById('ref2_rel').value})\n` +
+                       `--- 詳細資料已由系統紀錄 ---`;
 
-        liff.sendMessages([{ type: 'text', text: msg }])
-            .then(() => {
-                alert("申請已送出！");
-                liff.closeWindow();
-            })
-            .catch(err => alert("傳送失敗，請確認權限"));
+        liff.sendMessages([{
+            type: 'text',
+            text: report
+        }]).then(() => {
+            alert("申請資料已送出成功！");
+            liff.closeWindow();
+        }).catch(err => {
+            console.error(err);
+            alert("傳送失敗，請確認是否已在 LINE 開啟並授權權限。");
+        });
     }
 </script>
 
