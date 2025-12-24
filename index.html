@@ -73,23 +73,17 @@
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v29" placeholder="例：0977654321"></div>
     <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v30" placeholder="例：晚上七點後"></div>
 
-    <input type="file" id="photoInput" accept="image/*" style="position: absolute; width: 1px; height: 1px; opacity: 0;">
+    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="finalStep()">
 
-    <button id="submitBtn" class="btn" onclick="checkAndSend()">確認送出並開啟拍照</button>
+    <button id="submitBtn" class="btn" onclick="startProcess()">確認送出並開啟拍照</button>
 </div>
 
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
     liff.init({ liffId: LIFF_ID }).then(() => { if (!liff.isLoggedIn()) liff.login(); });
 
-    // 當客戶選完照片後，再關閉視窗
-    document.getElementById('photoInput').onchange = function() {
-        alert("照片選取成功！請回到 LINE 對話框按下「傳送」。");
-        liff.closeWindow();
-    };
-
-    function checkAndSend() {
-        const btn = document.getElementById('submitBtn');
+    // 第一步：檢查表單並立即彈出拍照選單
+    function startProcess() {
         const fields = [
             {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
             {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'}, {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, 
@@ -107,22 +101,34 @@
             }
         }
 
+        // 立即觸發拍照/相簿選單 (不等待訊息傳送，確保選單能彈出)
+        document.getElementById('photoInput').click();
+    }
+
+    // 第二步：當使用者「選完照片/拍完照」後，才發送文字訊息並關閉
+    function finalStep() {
+        const btn = document.getElementById('submitBtn');
         btn.disabled = true;
-        btn.innerText = "正在記錄資料...";
+        btn.innerText = "正在傳送申請資料...";
+
+        const fields = [
+            {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
+            {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'}, {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, 
+            {id:'v12', n:'現居地址'}, {id:'v13', n:'現居電話'}, {id:'v14', n:'居住時間'}, {id:'v15', n:'產權狀況'}, {id:'v16', n:'公司名稱'}, 
+            {id:'v17', n:'公司電話'}, {id:'v18', n:'公司地址'}, {id:'v19', n:'職稱'}, {id:'v20', n:'月收入'}, {id:'v21', n:'年資'}, 
+            {id:'v22', n:'勞保薪轉'}, {id:'v23', n:'聯絡1姓名'}, {id:'v24', n:'聯絡1關係'}, {id:'v25', n:'聯絡1電話'}, {id:'v26', n:'聯絡1照會時間'}, 
+            {id:'v27', n:'聯絡2姓名'}, {id:'v28', n:'聯絡2關係'}, {id:'v29', n:'聯絡2電話'}, {id:'v30', n:'聯絡2照會時間'}
+        ];
 
         let msg = "【新件正式申請單】\n";
         fields.forEach(f => { msg += `${f.n}：${document.getElementById(f.id).value}\n`; });
-        msg += "\n⚠️ 客戶即將傳送身分證照片，請注意接收。";
+        msg += "\n⚠️ 客戶已選擇照片，請確認後續上傳。";
 
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            // 資料發送成功後，直接點擊隱藏的檔案輸入框
-            // 在這之前不彈出 alert，以免阻礙系統彈窗
-            document.getElementById('photoInput').click();
-            
-            // 修改按鈕狀態引導客戶
-            btn.innerText = "請完成拍照/選取照片";
+            alert("資料已傳送！請回到對話框按下「傳送」照片。");
+            liff.closeWindow(); // 成功發送後強制關閉
         }).catch(e => {
-            alert("發送失敗，請重試");
+            alert("發送訊息失敗，請確認權限。");
             btn.disabled = false;
             btn.innerText = "確認送出並開啟拍照";
         });
