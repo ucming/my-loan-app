@@ -24,114 +24,58 @@
 <div class="container">
     <h2>商品分期正式申請表單</h2>
 
-    <div class="sec">一、個人基本資料</div>
-    <div class="g"><label>全名<span>*</span></label><input type="text" id="v1" placeholder="例：林大山"></div>
-    <div class="g"><label>LINE ID<span>*</span></label><input type="text" id="v2" placeholder="例：line888"></div>
-    <div class="g"><label>出生年月日<span>*</span></label><input type="text" id="v3" placeholder="例：80/01/01"></div>
-    <div class="g"><label>身分證字號<span>*</span></label><input type="text" id="v4" placeholder="例：A123456789"></div>
-    <div class="g"><label>最高學歷<span>*</span></label><input type="text" id="v5" placeholder="例：大學"></div>
-    <div class="g"><label>手機號碼<span>*</span></label><input type="tel" id="v6" placeholder="例：0912345678"></div>
-    <div class="g"><label>方便聯絡時間<span>*</span></label><input type="text" id="v7" placeholder="例：下午兩點後"></div>
-    <div class="g"><label>電信業者<span>*</span></label><input type="text" id="v8" placeholder="例：中華電信"></div>
-    <div class="g"><label>常用 Email<span>*</span></label><input type="email" id="v9" placeholder="例：service@example.com"></div>
-
-    <div class="sec">二、居住狀況</div>
-    <div class="g"><label>戶籍地址<span>*</span></label><input type="text" id="v10" placeholder="例：台北市中山區路段號樓"></div>
-    <div class="g"><label>戶籍電話<span>*</span></label><input type="text" id="v11" placeholder="例：02-23456789"></div>
-    <div class="g"><label>現居地址<span>*</span></label><input type="text" id="v12" placeholder="例：同戶籍地址"></div>
-    <div class="g"><label>現居電話<span>*</span></label><input type="text" id="v13" placeholder="無則填無"></div>
-    <div class="g"><label>現居地居住時間<span>*</span></label><input type="text" id="v14" placeholder="例：5年"></div>
-    <div class="g">
-        <label>居住持有狀況<span>*</span></label>
-        <select id="v15">
-            <option value="">請選擇</option>
-            <option value="自有">自有</option>
-            <option value="租賃">租賃</option>
-            <option value="親友">親友</option>
-            <option value="宿舍">宿舍</option>
-        </select>
-    </div>
-
-    <div class="sec">三、工作資訊</div>
-    <div class="g"><label>公司名稱<span>*</span></label><input type="text" id="v16" placeholder="例：好棒棒貿易行"></div>
-    <div class="g"><label>公司電話<span>*</span></label><input type="text" id="v17" placeholder="例：02-99887766"></div>
-    <div class="g"><label>公司地址<span>*</span></label><input type="text" id="v18" placeholder="例：新北市板橋區路段..."></div>
-    <div class="g"><label>職稱<span>*</span></label><input type="text" id="v19" placeholder="例：內勤專員"></div>
-    <div class="g"><label>月收入<span>*</span></label><input type="text" id="v20" placeholder="例：3萬5"></div>
-    <div class="g"><label>年資<span>*</span></label><input type="text" id="v21" placeholder="例：2年"></div>
-    <div class="g"><label>有無勞保薪轉<span>*</span></label><input type="text" id="v22" placeholder="例：皆有"></div>
-
-    <div class="sec">四、聯絡人資訊 (一)</div>
-    <div class="g"><label>姓名<span>*</span></label><input type="text" id="v23" placeholder="例：張小芳"></div>
-    <div class="g"><label>關係<span>*</span></label><input type="text" id="v24" placeholder="例：母子"></div>
-    <div class="g"><label>電話<span>*</span></label><input type="tel" id="v25" placeholder="例：0988123456"></div>
-    <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v26" placeholder="例：隨時"></div>
-
     <div class="sec">五、聯絡人資訊 (二)</div>
     <div class="g"><label>姓名<span>*</span></label><input type="text" id="v27" placeholder="例：陳大志"></div>
     <div class="g"><label>關係<span>*</span></label><input type="text" id="v28" placeholder="例：同事"></div>
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v29" placeholder="例：0977654321"></div>
     <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v30" placeholder="例：晚上七點後"></div>
 
-    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="finalStep()">
+    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="liff.closeWindow()">
 
-    <button id="submitBtn" class="btn" onclick="startProcess()">確認送出並開啟拍照</button>
+    <button id="submitBtn" class="btn" onclick="handleSubmit()">確認送出並開啟拍照</button>
 </div>
 
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
     liff.init({ liffId: LIFF_ID }).then(() => { if (!liff.isLoggedIn()) liff.login(); });
 
-    // 第一步：檢查表單並立即彈出拍照選單
-    function startProcess() {
-        const fields = [
-            {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
-            {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'}, {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, 
-            {id:'v12', n:'現居地址'}, {id:'v13', n:'現居電話'}, {id:'v14', n:'居住時間'}, {id:'v15', n:'產權狀況'}, {id:'v16', n:'公司名稱'}, 
-            {id:'v17', n:'公司電話'}, {id:'v18', n:'公司地址'}, {id:'v19', n:'職稱'}, {id:'v20', n:'月收入'}, {id:'v21', n:'年資'}, 
-            {id:'v22', n:'勞保薪轉'}, {id:'v23', n:'聯絡1姓名'}, {id:'v24', n:'聯絡1關係'}, {id:'v25', n:'聯絡1電話'}, {id:'v26', n:'聯絡1照會時間'}, 
-            {id:'v27', n:'聯絡2姓名'}, {id:'v28', n:'聯絡2關係'}, {id:'v29', n:'聯絡2電話'}, {id:'v30', n:'聯絡2照會時間'}
-        ];
-
-        for (let f of fields) {
-            if (!document.getElementById(f.id).value) { 
-                alert("「" + f.n + "」尚未填寫！"); 
-                document.getElementById(f.id).focus(); 
-                return; 
-            }
+    async function handleSubmit() {
+        const btn = document.getElementById('submitBtn');
+        const fields = [];
+        for(let i=1; i<=30; i++) {
+            const el = document.getElementById('v'+i);
+            if(el) fields.push({ val: el.value, id: 'v'+i });
         }
 
-        // 立即觸發拍照/相簿選單 (不等待訊息傳送，確保選單能彈出)
-        document.getElementById('photoInput').click();
-    }
+        // 檢查必填
+        if (fields.some(f => !f.val)) {
+            alert("請填寫所有標註 * 的必填欄位！");
+            return;
+        }
 
-    // 第二步：當使用者「選完照片/拍完照」後，才發送文字訊息並關閉
-    function finalStep() {
-        const btn = document.getElementById('submitBtn');
         btn.disabled = true;
-        btn.innerText = "正在傳送申請資料...";
+        btn.innerText = "資料傳送中...";
 
-        const fields = [
-            {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
-            {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'}, {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, 
-            {id:'v12', n:'現居地址'}, {id:'v13', n:'現居電話'}, {id:'v14', n:'居住時間'}, {id:'v15', n:'產權狀況'}, {id:'v16', n:'公司名稱'}, 
-            {id:'v17', n:'公司電話'}, {id:'v18', n:'公司地址'}, {id:'v19', n:'職稱'}, {id:'v20', n:'月收入'}, {id:'v21', n:'年資'}, 
-            {id:'v22', n:'勞保薪轉'}, {id:'v23', n:'聯絡1姓名'}, {id:'v24', n:'聯絡1關係'}, {id:'v25', n:'聯絡1電話'}, {id:'v26', n:'聯絡1照會時間'}, 
-            {id:'v27', n:'聯絡2姓名'}, {id:'v28', n:'聯絡2關係'}, {id:'v29', n:'聯絡2電話'}, {id:'v30', n:'聯絡2照會時間'}
-        ];
-
+        // 1. 組合文字訊息
         let msg = "【新件正式申請單】\n";
-        fields.forEach(f => { msg += `${f.n}：${document.getElementById(f.id).value}\n`; });
-        msg += "\n⚠️ 客戶已選擇照片，請確認後續上傳。";
+        // 這裡可以根據您的需求添加具體的欄位名稱映射
+        fields.forEach(f => { msg += `${f.id}：${f.val}\n`; });
 
-        liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            alert("資料已傳送！請回到對話框按下「傳送」照片。");
-            liff.closeWindow(); // 成功發送後強制關閉
-        }).catch(e => {
-            alert("發送訊息失敗，請確認權限。");
+        try {
+            // 2. 先送出文字訊息
+            await liff.sendMessages([{ type: 'text', text: msg }]);
+            
+            // 3. 送出成功後，立刻彈出拍照選單
+            // 注意：部分手機會攔截非直接點擊的 click，因此我們在成功後呼叫
+            document.getElementById('photoInput').click();
+
+            // 提示使用者
+            btn.innerText = "請選取照片完成最後步驟";
+        } catch (error) {
+            alert("傳送失敗：" + error);
             btn.disabled = false;
             btn.innerText = "確認送出並開啟拍照";
-        });
+        }
     }
 </script>
 </body>
