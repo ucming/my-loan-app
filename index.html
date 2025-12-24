@@ -8,16 +8,25 @@
     <style>
         :root { --p: #1a508b; --s: #28a745; --bg: #f4f7f9; }
         body { font-family: "PingFang TC", sans-serif; background-color: var(--bg); margin: 0; padding: 15px; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); padding-bottom: 40px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: var(--p); border-bottom: 2px solid var(--p); padding-bottom: 10px; }
         .sec { background: #eef2f7; color: var(--p); padding: 10px; border-left: 5px solid var(--p); font-weight: bold; margin-top: 25px; border-radius: 4px; }
         .g { margin-top: 15px; }
         label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #444; }
         label span { color: red; }
         input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: white; }
-        /* 修正按鈕樣式，確保下方無多餘圖案 */
-        .btn { background: var(--s); color: white; width: 100%; padding: 20px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; display: block; }
-        .btn:active { background: #218838; }
+        
+        /* 恢復藍色拍照按鈕區塊 */
+        .up-box { border: 2px dashed #1a508b; padding: 25px; text-align: center; border-radius: 12px; cursor: pointer; background: #f8fafd; margin-top: 8px; color: var(--p); font-weight: bold; position: relative; }
+        .up-box:active { background: #e1e9f1; }
+        
+        /* 隱藏原生檔案按鈕 */
+        input[type="file"] { display: none; }
+        
+        /* 預覽圖片：確保完全透明背景且不留殘影 */
+        .pre-img { width: 100%; margin-top: 12px; border-radius: 10px; display: none; border: 1px solid #ddd; background-color: transparent; }
+        
+        .btn { background: var(--s); color: white; width: 100%; padding: 20px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -36,7 +45,21 @@
     <div class="g"><label>電信業者<span>*</span></label><input type="text" id="v8" placeholder="例：中華電信"></div>
     <div class="g"><label>常用 Email<span>*</span></label><input type="email" id="v9" placeholder="例：user@example.com"></div>
 
-    <div class="sec">二、居住狀況</div>
+    <div class="sec">二、身分證件拍照上傳</div>
+    <div class="g">
+        <label>身分證【正面】<span>*</span></label>
+        <div class="up-box" onclick="document.getElementById('ff').click()">📸 點擊拍照或上傳正面</div>
+        <input type="file" id="ff" accept="image/*" onchange="pv(this, 'pf')">
+        <img id="pf" class="pre-img">
+    </div>
+    <div class="g">
+        <label>身分證【反面】<span>*</span></label>
+        <div class="up-box" onclick="document.getElementById('fb').click()">📸 點擊拍照或上傳反面</div>
+        <input type="file" id="fb" accept="image/*" onchange="pv(this, 'pb')">
+        <img id="pb" class="pre-img">
+    </div>
+
+    <div class="sec">三、居住狀況</div>
     <div class="g"><label>戶籍地址<span>*</span></label><input type="text" id="v10" placeholder="例：台北市中山區路段號樓"></div>
     <div class="g"><label>戶籍電話<span>*</span></label><input type="text" id="v11" placeholder="例：02-23456789"></div>
     <div class="g"><label>現居地址<span>*</span></label><input type="text" id="v12" placeholder="例：同戶籍地址"></div>
@@ -53,7 +76,7 @@
         </select>
     </div>
 
-    <div class="sec">三、工作資訊</div>
+    <div class="sec">四、工作資訊</div>
     <div class="g"><label>公司名稱<span>*</span></label><input type="text" id="v16" placeholder="例：虛構貿易行"></div>
     <div class="g"><label>公司電話<span>*</span></label><input type="text" id="v17" placeholder="例：02-99887766"></div>
     <div class="g"><label>公司地址<span>*</span></label><input type="text" id="v18" placeholder="例：新北市板橋區路段..."></div>
@@ -62,13 +85,13 @@
     <div class="g"><label>年資<span>*</span></label><input type="text" id="v21" placeholder="例：2年"></div>
     <div class="g"><label>有無勞保薪轉<span>*</span></label><input type="text" id="v22" placeholder="例：皆有"></div>
 
-    <div class="sec">四、聯絡人資訊 (一)</div>
+    <div class="sec">五、聯絡人資訊 (一)</div>
     <div class="g"><label>姓名<span>*</span></label><input type="text" id="v23" placeholder="例：張小芳"></div>
     <div class="g"><label>關係<span>*</span></label><input type="text" id="v24" placeholder="例：母子"></div>
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v25" placeholder="例：0988123456"></div>
     <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v26" placeholder="例：隨時"></div>
 
-    <div class="sec">五、聯絡人資訊 (二)</div>
+    <div class="sec">六、聯絡人資訊 (二)</div>
     <div class="g"><label>姓名<span>*</span></label><input type="text" id="v27" placeholder="例：陳大志"></div>
     <div class="g"><label>關係<span>*</span></label><input type="text" id="v28" placeholder="例：同事"></div>
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v29" placeholder="例：0977654321"></div>
@@ -80,6 +103,19 @@
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
     liff.init({ liffId: LIFF_ID }).then(() => { if (!liff.isLoggedIn()) liff.login(); });
+
+    function pv(input, targetId) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.getElementById(targetId);
+                img.src = e.target.result;
+                img.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 
     function send() {
         const fields = [
@@ -94,15 +130,21 @@
         for (let f of fields) {
             if (!document.getElementById(f.id).value) { alert("「" + f.n + "」尚未填寫！"); document.getElementById(f.id).focus(); return; }
         }
+        
+        // 檢查是否有選取照片
+        if (!document.getElementById('ff').files[0] || !document.getElementById('fb').files[0]) {
+            alert("請務必上傳身分證正反面照片！");
+            return;
+        }
 
         let msg = "【新件正式申請單】\n";
         fields.forEach(f => { msg += `${f.n}：${document.getElementById(f.id).value}\n`; });
-        msg += "\n⚠️ 請接著傳送身分證正反面照片！";
+        msg += "\n📸 證件照片：已在預覽中確認";
 
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            alert("資料已紀錄！即將為您開啟相機，請拍攝並傳送身分證件。");
-            liff.scanCodeV2().then(() => { liff.closeWindow(); }).catch(() => { liff.closeWindow(); });
-        }).catch(e => alert("傳送失敗，請確認權限設定。"));
+            alert("申請成功送出！");
+            liff.closeWindow();
+        }).catch(e => alert("傳送失敗"));
     }
 </script>
 </body>
