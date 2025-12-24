@@ -14,11 +14,8 @@
         .g { margin-top: 15px; }
         label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #444; }
         label span { color: red; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        .pre-box { display: flex; gap: 10px; margin-top: 10px; }
-        .pre-img { width: 48%; border-radius: 5px; display: none; border: 1px solid #ddd; }
-        .btn { background: var(--s); color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; }
-        #hidden-files { display: none; } /* 徹底隱藏上傳按鈕 */
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: white; }
+        .btn { background: var(--s); color: white; width: 100%; padding: 20px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -42,8 +39,17 @@
     <div class="g"><label>戶籍電話<span>*</span></label><input type="text" id="v11"></div>
     <div class="g"><label>現居地址<span>*</span></label><input type="text" id="v12"></div>
     <div class="g"><label>現居電話<span>*</span></label><input type="text" id="v13"></div>
-    <div class="g"><label>居住時間<span>*</span></label><input type="text" id="v14"></div>
-    <div class="g"><label>居住產權狀況<span>*</span></label><input type="text" id="v15"></div>
+    <div class="g"><label>現居地居住時間<span>*</span></label><input type="text" id="v14"></div>
+    <div class="g">
+        <label>居住持有狀況<span>*</span></label>
+        <select id="v15">
+            <option value="">請選擇</option>
+            <option value="自有">自有</option>
+            <option value="租賃">租賃</option>
+            <option value="親友">親友</option>
+            <option value="宿舍">宿舍</option>
+        </select>
+    </div>
 
     <div class="sec">三、工作資訊</div>
     <div class="g"><label>公司名稱<span>*</span></label><input type="text" id="v16"></div>
@@ -66,36 +72,14 @@
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v29"></div>
     <div class="g"><label>照會狀況<span>*</span></label><input type="text" id="v30"></div>
 
-    <div class="pre-box">
-        <img id="pf" class="pre-img">
-        <img id="pb" class="pre-img">
-    </div>
-
-    <div id="hidden-files">
-        <input type="file" id="ff" accept="image/*" capture="camera" onchange="pv(this, 'pf')">
-        <input type="file" id="fb" accept="image/*" capture="camera" onchange="pv(this, 'pb')">
-    </div>
-
-    <button class="btn" onclick="startProcess()">確認送出並開啟拍照</button>
+    <button class="btn" onclick="send()">確認送出並開啟拍照</button>
 </div>
 
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
     liff.init({ liffId: LIFF_ID }).then(() => { if (!liff.isLoggedIn()) liff.login(); });
 
-    function pv(i, id) {
-        const f = i.files[0];
-        if (f) {
-            const r = new FileReader();
-            r.onload = e => { const img = document.getElementById(id); img.src = e.target.result; img.style.display = 'block'; };
-            r.readAsDataURL(f);
-            // 拍完正面自動接反面
-            if(id === 'pf') setTimeout(() => { alert("步驟 2：請拍攝身分證【反面】"); document.getElementById('fb').click(); }, 1000);
-            else if(id === 'pb') setTimeout(() => { finishSend(); }, 1000);
-        }
-    }
-
-    function startProcess() {
+    function send() {
         const fields = [
             {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
             {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'}, {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, 
@@ -109,28 +93,13 @@
             if (!document.getElementById(f.id).value) { alert("「" + f.n + "」尚未填寫！"); document.getElementById(f.id).focus(); return; }
         }
 
-        // 觸發步驟2拍照流程
-        alert("資料已確認，進入步驟 2：請拍攝身分證【正面】");
-        document.getElementById('ff').click();
-    }
-
-    function finishSend() {
-        const fields = [
-            {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
-            {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'}, {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, 
-            {id:'v12', n:'現居地址'}, {id:'v13', n:'現居電話'}, {id:'v14', n:'居住時間'}, {id:'v15', n:'產權狀況'}, {id:'v16', n:'公司名稱'}, 
-            {id:'v17', n:'公司電話'}, {id:'v18', n:'公司地址'}, {id:'v19', n:'職稱'}, {id:'v20', n:'月收入'}, {id:'v21', n:'年資'}, 
-            {id:'v22', n:'勞保薪轉'}, {id:'v23', n:'聯絡1姓名'}, {id:'v24', n:'聯絡1關係'}, {id:'v25', n:'聯絡1電話'}, {id:'v26', n:'聯絡1照會'}, 
-            {id:'v27', n:'聯絡2姓名'}, {id:'v28', n:'聯絡2關係'}, {id:'v29', n:'聯絡2電話'}, {id:'v30', n:'聯絡2照會'}
-        ];
-
         let msg = "【新件正式申請單】\n";
         fields.forEach(f => { msg += `${f.n}：${document.getElementById(f.id).value}\n`; });
-        msg += "📸 證件照片：客戶已完成現場拍照上傳";
+        msg += "\n⚠️ 請接著傳送身分證正反面照片！";
 
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            alert("資料與照片已成功送出！");
-            liff.closeWindow();
+            alert("資料已紀錄！即將為您開啟相機，請拍攝並傳送身分證件。");
+            liff.scanCodeV2().then(result => { liff.closeWindow(); }).catch(err => { liff.closeWindow(); });
         }).catch(e => alert("傳送失敗"));
     }
 </script>
