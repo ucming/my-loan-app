@@ -72,14 +72,16 @@
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v29" placeholder="例：0977654321"></div>
     <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v30" placeholder="例：晚上七點後"></div>
 
-    <button class="btn" onclick="send()">確認送出並開啟拍照</button>
+    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="closeAfterSelect()">
+
+    <button class="btn" onclick="checkAndSend()">確認送出並開啟拍照</button>
 </div>
 
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
     liff.init({ liffId: LIFF_ID }).then(() => { if (!liff.isLoggedIn()) liff.login(); });
 
-    function send() {
+    function checkAndSend() {
         const fields = [
             {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
             {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'}, {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, 
@@ -89,18 +91,27 @@
             {id:'v27', n:'聯絡2姓名'}, {id:'v28', n:'聯絡2關係'}, {id:'v29', n:'聯絡2電話'}, {id:'v30', n:'聯絡2照會時間'}
         ];
 
+        // 檢查欄位
         for (let f of fields) {
             if (!document.getElementById(f.id).value) { alert("「" + f.n + "」尚未填寫！"); document.getElementById(f.id).focus(); return; }
         }
 
+        // 組合訊息文字
         let msg = "【新件正式申請單】\n";
         fields.forEach(f => { msg += `${f.n}：${document.getElementById(f.id).value}\n`; });
-        msg += "\n⚠️ 請接著傳送身分證正反面照片！";
+        msg += "\n⚠️ 客戶即將傳送身分證照片，請注意接收。";
 
+        // 先傳送文字訊息，成功後再彈出相機選單
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            alert("資料已紀錄！即將為您開啟相機，請拍攝並傳送身分證件。");
-            liff.scanCodeV2().then(result => { liff.closeWindow(); }).catch(err => { liff.closeWindow(); });
-        }).catch(e => alert("傳送失敗"));
+            alert("文字資料已記錄！請選擇「相機」拍照或「相簿」上傳身分證。");
+            document.getElementById('photoInput').click(); 
+        }).catch(e => alert("傳送失敗，請確認權限"));
+    }
+
+    // 當客戶選完照片或拍完照後執行的動作
+    function closeAfterSelect() {
+        alert("照片選取完成！請手動在對話框中按「傳送」給我們，表單即將關閉。");
+        liff.closeWindow();
     }
 </script>
 </body>
