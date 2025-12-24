@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品分期申請平台</title>
+    <title>商品分期申請平台(含證件上傳)</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #f8f9fa; margin: 0; padding: 15px; }
@@ -13,6 +13,9 @@
         .form-group { margin-top: 15px; }
         label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: #444; }
         input, select { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .upload-area { border: 2px dashed #ccc; padding: 15px; text-align: center; border-radius: 8px; margin-top: 10px; cursor: pointer; }
+        .upload-area:hover { border-color: #28a745; background: #f0fff4; }
+        .preview-img { width: 100%; max-height: 200px; object-fit: contain; display: none; margin-top: 10px; border-radius: 4px; }
         .submit-btn { background: #28a745; color: white; width: 100%; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; margin-top: 30px; cursor: pointer; }
     </style>
 </head>
@@ -20,65 +23,69 @@
 
 <div class="container">
     <h2>分期申請表單</h2>
-    <p style="font-size: 13px; color: #666;">請填寫以下完整資料，以加快審核進度。</p>
-
-    <div class="section-title">一、個人基本資料</div>
-    <div class="form-group"><label>全名</label><input type="text" id="name" placeholder="請輸入真實姓名"></div>
-    <div class="form-group"><label>出生年月日</label><input type="text" id="birthday" placeholder="範例：71/09/24"></div>
-    <div class="form-group"><label>身分證字號</label><input type="text" id="id_num" placeholder="請輸入身分證字號"></div>
-    <div class="form-group"><label>最高學歷</label><select id="edu"><option>高職</option><option>國中</option><option>高中</option><option>大專</option><option>大學以上</option></select></div>
+    
+    <div class="section-title">一、基本資料 (請填寫完整)</div>
+    <div class="form-group"><label>全名</label><input type="text" id="name" placeholder="請輸入姓名"></div>
     <div class="form-group"><label>手機號碼</label><input type="tel" id="mobile" placeholder="09xxxxxxxx"></div>
-    <div class="form-group"><label>方便聯絡時間</label><input type="text" id="c_time" placeholder="例如：13:00~15:00"></div>
-    <div class="form-group"><label>電信業者</label><input type="text" id="tel_co" placeholder="例如：中華電信"></div>
-    <div class="form-group"><label>常用 Email</label><input type="email" id="email" placeholder="example@gmail.com"></div>
 
-    <div class="section-title">二、居住狀況</div>
-    <div class="form-group"><label>戶籍地址</label><input type="text" id="h_addr"></div>
-    <div class="form-group"><label>戶籍電話</label><input type="text" id="h_tel"></div>
-    <div class="form-group"><label>現居地址</label><input type="text" id="c_addr"></div>
-    <div class="form-group"><label>現居地居住時間</label><input type="text" id="live_time" placeholder="例如：5年"></div>
-    <div class="form-group"><label>居住持有狀況</label><select id="h_type"><option>親友持有</option><option>自有</option><option>租賃</option></select></div>
+    <div class="section-title">二、身分證件上傳</div>
+    <div class="form-group">
+        <label>身分證【正面】</label>
+        <div class="upload-area" onclick="document.getElementById('img_front').click()">
+            <span id="text_front">點擊拍照或上傳正面</span>
+            <input type="file" id="img_front" accept="image/*" capture="camera" style="display:none" onchange="preview(this, 'view_front', 'text_front')">
+            <img id="view_front" class="preview-img">
+        </div>
+    </div>
 
-    <div class="section-title">三、工作資訊</div>
-    <div class="form-group"><label>公司名稱</label><input type="text" id="comp"></div>
-    <div class="form-group"><label>公司電話</label><input type="text" id="comp_tel"></div>
-    <div class="form-group"><label>職稱</label><input type="text" id="job"></div>
-    <div class="form-group"><label>月收入</label><input type="number" id="income" placeholder="例如：35000"></div>
-    <div class="form-group"><label>年資</label><input type="text" id="seniority"></div>
-
-    <div class="section-title">四、聯絡人資訊 (一)</div>
-    <div class="form-group"><label>姓名</label><input type="text" id="ref1_name"></div>
-    <div class="form-group"><label>關係</label><input type="text" id="ref1_rel"></div>
-    <div class="form-group"><label>電話</label><input type="tel" id="ref1_tel"></div>
-
-    <div class="section-title">五、聯絡人資訊 (二)</div>
-    <div class="form-group"><label>姓名</label><input type="text" id="ref2_name"></div>
-    <div class="form-group"><label>關係</label><input type="text" id="ref2_rel"></div>
-    <div class="form-group"><label>電話</label><input type="tel" id="ref2_tel"></div>
+    <div class="form-group">
+        <label>身分證【反面】</label>
+        <div class="upload-area" onclick="document.getElementById('img_back').click()">
+            <span id="text_back">點擊拍照或上傳反面</span>
+            <input type="file" id="img_back" accept="image/*" capture="camera" style="display:none" onchange="preview(this, 'view_back', 'text_back')">
+            <img id="view_back" class="preview-img">
+        </div>
+    </div>
 
     <button class="submit-btn" onclick="sendToLine()">確認送出申請</button>
 </div>
 
 <script>
-    // 這裡要換成你的 LIFF ID
+    // 你的專屬 LIFF ID
     const myLiffId = "2008759894-DkxBFgJp";
 
     liff.init({ liffId: myLiffId }).then(() => {
         if (!liff.isLoggedIn()) { liff.login(); }
-    }).catch(err => console.error("LIFF 初始化失敗", err));
+    });
+
+    // 預覽照片功能
+    function preview(input, imgId, textId) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(imgId).src = e.target.result;
+                document.getElementById(imgId).style.display = "block";
+                document.getElementById(textId).innerText = "已選取照片";
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 
     function sendToLine() {
         const name = document.getElementById('name').value;
         if (!name) { alert("請填寫姓名"); return; }
 
-        const message = `【新件申請報告】\n姓名：${name}\n電話：${document.getElementById('mobile').value}\n身分證：${document.getElementById('id_num').value}\n居住地：${document.getElementById('c_addr').value}\n工作：${document.getElementById('comp').value}\n(其餘詳細資料已記錄)`;
+        // 整理文字報告
+        const report = `【新件申請】\n姓名：${name}\n電話：${document.getElementById('mobile').value}\n(附件：身分證正反面照片)`;
 
-        liff.sendMessages([{ type: 'text', text: message }])
+        // 第一步：傳送文字報告
+        liff.sendMessages([{ type: 'text', text: report }])
             .then(() => {
-                alert("申請資料已送出！");
+                alert("資料已初步送出，接下來請手動從相簿選擇剛才拍的證件照傳送給我們（或直接關閉視窗）");
                 liff.closeWindow();
             })
-            .catch(err => alert("傳送失敗，請確認 Scopes 是否開啟 chat_message.write"));
+            .catch(err => alert("傳送失敗"));
     }
 </script>
 
