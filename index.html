@@ -10,20 +10,19 @@
         body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg); margin: 0; padding: 15px; color: #333; }
         .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: var(--primary); margin-bottom: 20px; font-size: 22px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
-        .section-header { background: var(--primary); color: white; padding: 10px 15px; border-radius: 6px; font-size: 16px; margin-top: 25px; font-weight: bold; }
+        .section-header { background: #e9ecef; color: var(--primary); padding: 12px 15px; border-left: 6px solid var(--primary); border-radius: 4px; font-size: 16px; margin-top: 25px; font-weight: bold; }
         .form-group { margin-top: 15px; }
-        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #555; }
+        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #444; }
         label span { color: #e74c3c; margin-left: 4px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: #fff; }
-        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(26,80,139,0.1); }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: #fff; }
         
-        /* 拍照對話框樣式 */
-        .upload-box { border: 2px dashed #1a508b; padding: 25px; text-align: center; border-radius: 12px; cursor: pointer; background: #f8fafd; margin-top: 8px; color: var(--primary); font-weight: bold; }
-        .upload-box:hover { background: #eff4f9; }
+        /* 步驟 2 拍照區塊樣式 */
+        .upload-step { border: 2px dashed #1a508b; padding: 25px; text-align: center; border-radius: 12px; cursor: pointer; background: #f8fafd; margin-top: 8px; transition: 0.3s; }
+        .upload-step:hover { background: #eff4f9; }
+        .upload-text { color: var(--primary); font-weight: bold; font-size: 16px; }
         .preview-img { width: 100%; margin-top: 12px; border-radius: 10px; display: none; border: 1px solid #ddd; }
 
-        .submit-btn { background: var(--secondary); color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; transition: 0.3s; }
-        .submit-btn:active { transform: scale(0.98); background: #218838; }
+        .submit-btn { background: var(--secondary); color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -33,7 +32,7 @@
 
     <div class="section-header">一、個人基本資料</div>
     <div class="form-group"><label>申請人全名<span>*</span></label><input type="text" id="n" placeholder="例：王小明"></div>
-    <div class="form-group"><label>LINE ID<span>*</span></label><input type="text" id="li" placeholder="請填寫完整 ID"></div>
+    <div class="form-group"><label>LINE ID<span>*</span></label><input type="text" id="li" placeholder="請填寫完整 LINE ID"></div>
     <div class="form-group"><label>出生年月日<span>*</span></label><input type="text" id="b" placeholder="例：75/05/20"></div>
     <div class="form-group"><label>身分證字號<span>*</span></label><input type="text" id="id" placeholder="例：A123456789"></div>
     <div class="form-group"><label>最高學歷<span>*</span></label><input type="text" id="e" placeholder="例：大學"></div>
@@ -45,13 +44,17 @@
     <div class="section-header">二、身分證件拍照上傳</div>
     <div class="form-group">
         <label>身分證【正面】<span>*</span></label>
-        <div class="upload-box" onclick="document.getElementById('ff').click()">📸 點擊拍照或上傳正面</div>
+        <div class="upload-step" onclick="document.getElementById('ff').click()">
+            <div class="upload-text">📸 點擊拍照或上傳正面</div>
+        </div>
         <input type="file" id="ff" accept="image/*" style="display:none" onchange="pv(this, 'pf')">
         <img id="pf" class="preview-img">
     </div>
     <div class="form-group">
         <label>身分證【反面】<span>*</span></label>
-        <div class="upload-box" onclick="document.getElementById('fb').click()">📸 點擊拍照或上傳反面</div>
+        <div class="upload-step" onclick="document.getElementById('fb').click()">
+            <div class="upload-text">📸 點擊拍照或上傳反面</div>
+        </div>
         <input type="file" id="fb" accept="image/*" style="display:none" onchange="pv(this, 'pb')">
         <img id="pb" class="preview-img">
     </div>
@@ -61,14 +64,24 @@
     <div class="form-group"><label>戶籍電話<span>*</span></label><input type="text" id="ht"></div>
     <div class="form-group"><label>現居地址<span>*</span></label><input type="text" id="ca"></div>
     <div class="form-group"><label>現居電話<span>*</span></label><input type="text" id="ctel"></div>
-    <div class="form-group"><label>居住時間與持有狀況<span>*</span></label><input type="text" id="lt" placeholder="例：5年 / 自有"></div>
+    <div class="form-group"><label>現居地居住時間<span>*</span></label><input type="text" id="lt" placeholder="例：3年6個月"></div>
+    <div class="form-group">
+        <label>居住持有狀況<span>*</span></label>
+        <select id="hs">
+            <option value="">請選擇</option>
+            <option value="自有">自有</option>
+            <option value="家人持有">家人持有</option>
+            <option value="租賃">租賃</option>
+        </select>
+    </div>
 
     <div class="section-header">四、工作資訊</div>
     <div class="form-group"><label>公司名稱<span>*</span></label><input type="text" id="cn"></div>
     <div class="form-group"><label>公司電話<span>*</span></label><input type="text" id="cp"></div>
     <div class="form-group"><label>公司地址<span>*</span></label><input type="text" id="cad"></div>
     <div class="form-group"><label>職稱<span>*</span></label><input type="text" id="j"></div>
-    <div class="form-group"><label>月收入與年資<span>*</span></label><input type="text" id="inc" placeholder="例：4萬 / 2年"></div>
+    <div class="form-group"><label>月收入<span>*</span></label><input type="text" id="inc" placeholder="例：45,000"></div>
+    <div class="form-group"><label>年資<span>*</span></label><input type="text" id="worky" placeholder="例：2年"></div>
     <div class="form-group"><label>有無勞保薪轉<span>*</span></label><input type="text" id="is"></div>
 
     <div class="section-header">五、聯絡人資訊 (一)</div>
@@ -103,14 +116,15 @@
         const fields = [
             {id:'n', n:'全名'}, {id:'li', n:'LINE ID'}, {id:'b', n:'生日'}, {id:'id', n:'身分證'}, {id:'e', n:'學歷'}, {id:'p', n:'手機'}, 
             {id:'ct', n:'聯絡時間'}, {id:'tc', n:'電信'}, {id:'em', n:'Email'}, {id:'ha', n:'戶籍地址'}, {id:'ht', n:'戶籍電話'}, 
-            {id:'ca', n:'現居地址'}, {id:'ctel', n:'現居電話'}, {id:'lt', n:'居住狀況'}, {id:'cn', n:'公司名稱'}, {id:'cp', n:'公司電話'}, 
-            {id:'cad', n:'公司地址'}, {id:'j', n:'職稱'}, {id:'inc', n:'收入年資'}, {id:'is', n:'勞保薪轉'}, {id:'r1n', n:'聯絡1姓名'}, 
-            {id:'r1r', n:'聯絡1關係'}, {id:'r1p', n:'聯絡1電話'}, {id:'r1s', n:'聯絡1照會'}, {id:'r2n', n:'聯絡2姓名'}, {id:'r2r', n:'聯絡2關係'}, 
-            {id:'r2p', n:'聯絡2電話'}, {id:'r2s', n:'聯絡2照會'}
+            {id:'ca', n:'現居地址'}, {id:'ctel', n:'現居電話'}, {id:'lt', n:'居住時間'}, {id:'hs', n:'持有狀況'}, {id:'cn', n:'公司名稱'}, 
+            {id:'cp', n:'公司電話'}, {id:'cad', n:'公司地址'}, {id:'j', n:'職稱'}, {id:'inc', n:'月收入'}, {id:'worky', n:'工作年資'}, 
+            {id:'is', n:'勞保薪轉'}, {id:'r1n', n:'聯絡1姓名'}, {id:'r1r', n:'聯絡1關係'}, {id:'r1p', n:'聯絡1電話'}, {id:'r1s', n:'聯絡1照會'}, 
+            {id:'r2n', n:'聯絡2姓名'}, {id:'r2r', n:'聯絡2關係'}, {id:'r2p', n:'聯絡2電話'}, {id:'r2s', n:'聯絡2照會'}
         ];
 
         for (let f of fields) {
-            if (!document.getElementById(f.id).value) { alert("「" + f.n + "」尚未填寫！"); document.getElementById(f.id).focus(); return; }
+            let val = document.getElementById(f.id).value;
+            if (!val) { alert("「" + f.n + "」尚未填寫！"); document.getElementById(f.id).focus(); return; }
         }
         if (!document.getElementById('ff').files[0] || !document.getElementById('fb').files[0]) { alert("請務必拍上傳身分證正反面！"); return; }
 
@@ -121,7 +135,7 @@
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
             alert("申請成功送出！");
             liff.closeWindow();
-        }).catch(e => alert("傳送失敗，請檢查 LINE 權限"));
+        }).catch(e => alert("傳送失敗"));
     }
 </script>
 </body>
