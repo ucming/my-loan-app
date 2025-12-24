@@ -6,19 +6,18 @@
     <title>商品分期正式申請表</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        :root { --p: #1a508b; --s: #28a745; --bg: #f4f7f9; --blue: #007bff; }
+        :root { --p: #1a508b; --s: #28a745; --bg: #f4f7f9; }
         body { font-family: "PingFang TC", sans-serif; background-color: var(--bg); margin: 0; padding: 15px; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); padding-bottom: 40px; }
         h2 { text-align: center; color: var(--p); border-bottom: 2px solid var(--p); padding-bottom: 10px; }
         .sec { background: #eef2f7; color: var(--p); padding: 10px; border-left: 5px solid var(--p); font-weight: bold; margin-top: 25px; border-radius: 4px; }
         .g { margin-top: 15px; }
         label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #444; }
         label span { color: red; }
         input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: white; }
-        .btn-group { margin-top: 40px; }
-        .btn { color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
-        .btn-green { background: var(--s); }
-        .btn-blue { background: var(--blue); }
+        /* 修正按鈕樣式，確保下方無多餘圖案 */
+        .btn { background: var(--s); color: white; width: 100%; padding: 20px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; display: block; }
+        .btn:active { background: #218838; }
     </style>
 </head>
 <body>
@@ -31,11 +30,11 @@
     <div class="g"><label>LINE ID<span>*</span></label><input type="text" id="v2" placeholder="例：line888"></div>
     <div class="g"><label>出生年月日<span>*</span></label><input type="text" id="v3" placeholder="例：80/01/01"></div>
     <div class="g"><label>身分證字號<span>*</span></label><input type="text" id="v4" placeholder="例：A123456789"></div>
-    <div class="g"><label>最高學歷<span>*</span></label><input type="text" id="v5" placeholder="例：大學"></div>
+    <div class="g"><label>最高學歷<span>*</span></label><input type="text" id="v5" placeholder="例：大學初畢"></div>
     <div class="g"><label>手機號碼<span>*</span></label><input type="tel" id="v6" placeholder="例：0912345678"></div>
     <div class="g"><label>方便聯絡時間<span>*</span></label><input type="text" id="v7" placeholder="例：下午兩點後"></div>
     <div class="g"><label>電信業者<span>*</span></label><input type="text" id="v8" placeholder="例：中華電信"></div>
-    <div class="g"><label>常用 Email<span>*</span></label><input type="email" id="v9" placeholder="例：service@example.com"></div>
+    <div class="g"><label>常用 Email<span>*</span></label><input type="email" id="v9" placeholder="例：user@example.com"></div>
 
     <div class="sec">二、居住狀況</div>
     <div class="g"><label>戶籍地址<span>*</span></label><input type="text" id="v10" placeholder="例：台北市中山區路段號樓"></div>
@@ -55,10 +54,10 @@
     </div>
 
     <div class="sec">三、工作資訊</div>
-    <div class="g"><label>公司名稱<span>*</span></label><input type="text" id="v16" placeholder="例：好棒棒貿易行"></div>
+    <div class="g"><label>公司名稱<span>*</span></label><input type="text" id="v16" placeholder="例：虛構貿易行"></div>
     <div class="g"><label>公司電話<span>*</span></label><input type="text" id="v17" placeholder="例：02-99887766"></div>
     <div class="g"><label>公司地址<span>*</span></label><input type="text" id="v18" placeholder="例：新北市板橋區路段..."></div>
-    <div class="g"><label>職稱<span>*</span></label><input type="text" id="v19" placeholder="例：內勤專員"></div>
+    <div class="g"><label>職稱<span>*</span></label><input type="text" id="v19" placeholder="例：行政專員"></div>
     <div class="g"><label>月收入<span>*</span></label><input type="text" id="v20" placeholder="例：3萬5"></div>
     <div class="g"><label>年資<span>*</span></label><input type="text" id="v21" placeholder="例：2年"></div>
     <div class="g"><label>有無勞保薪轉<span>*</span></label><input type="text" id="v22" placeholder="例：皆有"></div>
@@ -75,17 +74,13 @@
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v29" placeholder="例：0977654321"></div>
     <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v30" placeholder="例：晚上七點後"></div>
 
-    <div class="btn-group">
-        <button class="btn btn-green" onclick="send()">步驟 1：確認送出申請表單</button>
-        <button class="btn btn-blue" onclick="closeAndPhoto()">步驟 2：上傳證件 (開啟相機)</button>
-    </div>
+    <button class="btn" onclick="send()">確認送出並開啟拍照</button>
 </div>
 
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
     liff.init({ liffId: LIFF_ID }).then(() => { if (!liff.isLoggedIn()) liff.login(); });
 
-    // 傳送表單資料
     function send() {
         const fields = [
             {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
@@ -97,25 +92,17 @@
         ];
 
         for (let f of fields) {
-            if (!document.getElementById(f.id).value) {
-                alert("「" + f.n + "」尚未填寫！");
-                document.getElementById(f.id).focus();
-                return;
-            }
+            if (!document.getElementById(f.id).value) { alert("「" + f.n + "」尚未填寫！"); document.getElementById(f.id).focus(); return; }
         }
 
         let msg = "【新件正式申請單】\n";
         fields.forEach(f => { msg += `${f.n}：${document.getElementById(f.id).value}\n`; });
+        msg += "\n⚠️ 請接著傳送身分證正反面照片！";
 
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            alert("申請資料已傳送！請接著點擊下方「上傳證件」按鈕。");
-        }).catch(e => alert("傳送失敗，請確保在 LINE 內開啟"));
-    }
-
-    // 方案 A：引導傳照片
-    function closeAndPhoto() {
-        alert("請準備拍攝或從相簿選取「身分證正反面」傳送至對話框。\n視窗即將關閉，請點擊聊天室左下方「相機」或「圖片」圖示。");
-        liff.closeWindow();
+            alert("資料已紀錄！即將為您開啟相機，請拍攝並傳送身分證件。");
+            liff.scanCodeV2().then(() => { liff.closeWindow(); }).catch(() => { liff.closeWindow(); });
+        }).catch(e => alert("傳送失敗，請確認權限設定。"));
     }
 </script>
 </body>
