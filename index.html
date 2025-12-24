@@ -6,7 +6,7 @@
     <title>商品分期正式申請表</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        :root { --p: #1a508b; --s: #28a745; --bg: #f4f7f9; }
+        :root { --p: #1a508b; --s: #28a745; --bg: #f4f7f9; --blue: #007bff; }
         body { font-family: "PingFang TC", sans-serif; background-color: var(--bg); margin: 0; padding: 15px; }
         .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         h2 { text-align: center; color: var(--p); border-bottom: 2px solid var(--p); padding-bottom: 10px; }
@@ -15,7 +15,10 @@
         label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #444; }
         label span { color: red; }
         input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: white; }
-        .btn { background: var(--s); color: white; width: 100%; padding: 20px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; }
+        .btn-group { margin-top: 40px; }
+        .btn { color: white; width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
+        .btn-green { background: var(--s); }
+        .btn-blue { background: var(--blue); }
     </style>
 </head>
 <body>
@@ -72,13 +75,17 @@
     <div class="g"><label>電話<span>*</span></label><input type="tel" id="v29" placeholder="例：0977654321"></div>
     <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v30" placeholder="例：晚上七點後"></div>
 
-    <button class="btn" onclick="send()">確認送出並開啟拍照</button>
+    <div class="btn-group">
+        <button class="btn btn-green" onclick="send()">步驟 1：確認送出申請表單</button>
+        <button class="btn btn-blue" onclick="closeAndPhoto()">步驟 2：上傳證件 (開啟相機)</button>
+    </div>
 </div>
 
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
     liff.init({ liffId: LIFF_ID }).then(() => { if (!liff.isLoggedIn()) liff.login(); });
 
+    // 傳送表單資料
     function send() {
         const fields = [
             {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'}, {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, 
@@ -90,17 +97,25 @@
         ];
 
         for (let f of fields) {
-            if (!document.getElementById(f.id).value) { alert("「" + f.n + "」尚未填寫！"); document.getElementById(f.id).focus(); return; }
+            if (!document.getElementById(f.id).value) {
+                alert("「" + f.n + "」尚未填寫！");
+                document.getElementById(f.id).focus();
+                return;
+            }
         }
 
         let msg = "【新件正式申請單】\n";
         fields.forEach(f => { msg += `${f.n}：${document.getElementById(f.id).value}\n`; });
-        msg += "\n⚠️ 請接著傳送身分證正反面照片！";
 
         liff.sendMessages([{ type: 'text', text: msg }]).then(() => {
-            alert("資料已紀錄！即將為您開啟相機，請拍攝並傳送身分證件。");
-            liff.scanCodeV2().then(result => { liff.closeWindow(); }).catch(err => { liff.closeWindow(); });
-        }).catch(e => alert("傳送失敗"));
+            alert("申請資料已傳送！請接著點擊下方「上傳證件」按鈕。");
+        }).catch(e => alert("傳送失敗，請確保在 LINE 內開啟"));
+    }
+
+    // 方案 A：引導傳照片
+    function closeAndPhoto() {
+        alert("請準備拍攝或從相簿選取「身分證正反面」傳送至對話框。\n視窗即將關閉，請點擊聊天室左下方「相機」或「圖片」圖示。");
+        liff.closeWindow();
     }
 </script>
 </body>
