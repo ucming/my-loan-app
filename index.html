@@ -3,161 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品分期申請平台 (正式營運版)</title>
+    <title>專業分期申請平台</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        body { font-family: -apple-system, "Microsoft JhengHei", sans-serif; background-color: #f0f2f5; margin: 0; padding: 15px; color: #333; }
-        .container { max-width: 100%; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        h2 { color: #004a87; text-align: center; margin-bottom: 5px; }
-        p.subtitle { text-align: center; font-size: 13px; color: #666; margin-bottom: 25px; }
-        .section-title { background: #eef2f3; padding: 10px 15px; font-weight: bold; margin-top: 25px; border-left: 5px solid #28a745; border-radius: 4px; color: #2c3e50; }
-        .form-group { margin-top: 15px; }
-        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #555; }
-        label span { color: red; margin-left: 4px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
-        input:focus { border-color: #28a745; }
-        .upload-area { border: 2px dashed #28a745; padding: 20px; text-align: center; border-radius: 10px; margin-top: 10px; cursor: pointer; background: #f9fffb; }
-        .preview-img { width: 100%; margin-top: 15px; border-radius: 10px; display: none; border: 1px solid #ddd; }
-        .submit-btn { background: #28a745; color: white; width: 100%; padding: 18px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; width: 100%; box-shadow: 0 4px 10px rgba(40,167,69,0.3); }
-        .submit-btn:active { background: #218838; }
+        :root { --primary-color: #1a508b; --accent-color: #28a745; --bg-color: #f4f7f9; }
+        body { font-family: -apple-system, sans-serif; background-color: var(--bg-color); margin: 0; padding: 15px; color: #333; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        h2 { text-align: center; color: var(--primary-color); font-size: 24px; margin-bottom: 5px; }
+        .section-header { background: linear-gradient(90deg, var(--primary-color), #3a7bd5); color: white; padding: 10px 18px; border-radius: 10px; font-size: 16px; font-weight: bold; margin-top: 30px; }
+        .form-group { margin-top: 18px; }
+        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #444; }
+        input, select { width: 100%; padding: 14px; border: 1px solid #e0e0e0; border-radius: 12px; box-sizing: border-box; font-size: 16px; background: #fafafa; }
+        .upload-area { border: 2px dashed #cbd5e0; padding: 20px; text-align: center; border-radius: 15px; margin-top: 10px; background: #f8fbff; cursor: pointer; }
+        .preview-img { width: 100%; margin-top: 15px; border-radius: 12px; display: none; }
+        .submit-btn { background: linear-gradient(135deg, #28a745 0%, #218838 100%); color: white; width: 100%; padding: 20px; border: none; border-radius: 50px; font-size: 19px; font-weight: bold; margin-top: 45px; cursor: pointer; box-shadow: 0 8px 25px rgba(40,167,69,0.35); letter-spacing: 3px; }
+        .submit-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>分期申請表單</h2>
-    <p class="subtitle">※ 以下所有欄位均為必填，請務必真實填寫</p>
+    <h2>分期申請系統</h2>
     
-    <div class="section-title">一、個人基本資料</div>
-    <div class="form-group"><label>全名<span>*</span></label><input type="text" id="name" data-name="全名"></div>
-    <div class="form-group"><label>手機號碼<span>*</span></label><input type="tel" id="mobile" data-name="手機號碼"></div>
-    <div class="form-group"><label>出生年月日<span>*</span></label><input type="text" id="birthday" data-name="出生年月日" placeholder="例：75/10/20"></div>
-    <div class="form-group"><label>身分證字號<span>*</span></label><input type="text" id="id_num" data-name="身分證字號"></div>
-    <div class="form-group"><label>最高學歷<span>*</span></label>
-        <select id="edu" data-name="最高學歷"><option value="">請選擇</option><option>國中</option><option>高中/職</option><option>大專</option><option>大學以上</option></select>
-    </div>
-    <div class="form-group"><label>電信業者<span>*</span></label><input type="text" id="tel_co" data-name="電信業者"></div>
-    <div class="form-group"><label>常用 Email<span>*</span></label><input type="email" id="email" data-name="Email"></div>
+    <div class="section-header">01. 個人基本資訊</div>
+    <div class="form-group"><label>全名</label><input type="text" id="name"></div>
+    <div class="form-group"><label>身分證字號</label><input type="text" id="id_num"></div>
+    <div class="form-group"><label>手機號碼</label><input type="tel" id="mobile"></div>
+    <div class="form-group"><label>出生年月日</label><input type="text" id="birthday"></div>
+    <div class="form-group"><label>最高學歷</label><select id="edu"><option>大學以上</option><option>大專</option><option selected>高中/職</option><option>國中</option></select></div>
+    <div class="form-group"><label>電信業者</label><input type="text" id="tel_co"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="email"></div>
 
-    <div class="section-title">二、居住狀況</div>
-    <div class="form-group"><label>戶籍地址<span>*</span></label><input type="text" id="h_addr" data-name="戶籍地址"></div>
-    <div class="form-group"><label>戶籍電話<span>*</span></label><input type="text" id="h_tel" data-name="戶籍電話"></div>
-    <div class="form-group"><label>現居地址<span>*</span></label><input type="text" id="c_addr" data-name="現居地址"></div>
-    <div class="form-group"><label>現居地居住時間<span>*</span></label><input type="text" id="live_time" data-name="居住時間" placeholder="例：5年"></div>
-    <div class="form-group"><label>居住持有狀況<span>*</span></label>
-        <select id="h_type" data-name="居住持有狀況"><option value="">請選擇</option><option>自有</option><option>親友持有</option><option>租賃</option></select>
-    </div>
+    <div class="section-header">02. 居住狀況</div>
+    <div class="form-group"><label>戶籍地址</label><input type="text" id="h_addr"></div>
+    <div class="form-group"><label>現居地址</label><input type="text" id="c_addr"></div>
+    <div class="form-group"><label>居住持有狀況</label><select id="h_type"><option>親友持有</option><option>自有</option><option>租賃</option></select></div>
 
-    <div class="section-title">三、工作資訊</div>
-    <div class="form-group"><label>公司名稱<span>*</span></label><input type="text" id="comp" data-name="公司名稱"></div>
-    <div class="form-group"><label>公司電話<span>*</span></label><input type="text" id="comp_tel" data-name="公司電話"></div>
-    <div class="form-group"><label>職稱<span>*</span></label><input type="text" id="job" data-name="職稱"></div>
-    <div class="form-group"><label>月收入<span>*</span></label><input type="number" id="income" data-name="月收入"></div>
-    <div class="form-group"><label>年資<span>*</span></label><input type="text" id="seniority" data-name="年資" placeholder="例：2年3個月"></div>
+    <div class="section-header">03. 工作資訊</div>
+    <div class="form-group"><label>公司名稱</label><input type="text" id="comp"></div>
+    <div class="form-group"><label>公司電話</label><input type="text" id="comp_tel"></div>
+    <div class="form-group"><label>職稱</label><input type="text" id="job"></div>
+    <div class="form-group"><label>月收入</label><input type="number" id="income"></div>
+    <div class="form-group"><label>年資</label><input type="text" id="seniority"></div>
 
-    <div class="section-title">四、證件拍照上傳</div>
+    <div class="section-header">04. 證件上傳</div>
     <div class="form-group">
-        <label>身分證【正面】<span>*</span></label>
-        <div class="upload-area" onclick="document.getElementById('img_front').click()">📷 點擊拍攝正面</div>
-        <input type="file" id="img_front" accept="image/*" style="display:none" onchange="handlePreview(this, 'p_front')" data-name="身分證正面">
-        <img id="p_front" class="preview-img">
+        <label>身分證【正面】</label>
+        <div class="upload-area" onclick="document.getElementById('f').click()">📷 點擊拍攝正面</div>
+        <input type="file" id="f" accept="image/*" style="display:none" onchange="pv(this, 'pf')">
+        <img id="pf" class="preview-img">
     </div>
     <div class="form-group">
-        <label>身分證【反面】<span>*</span></label>
-        <div class="upload-area" onclick="document.getElementById('img_back').click()">📷 點擊拍攝反面</div>
-        <input type="file" id="img_back" accept="image/*" style="display:none" onchange="handlePreview(this, 'p_back')" data-name="身分證反面">
-        <img id="p_back" class="preview-img">
+        <label>身分證【反面】</label>
+        <div class="upload-area" onclick="document.getElementById('b').click()">📷 點擊拍攝反面</div>
+        <input type="file" id="b" accept="image/*" style="display:none" onchange="pv(this, 'pb')">
+        <img id="pb" class="preview-img">
     </div>
 
-    <div class="section-title">五、聯絡人資訊 (一)</div>
-    <div class="form-group"><label>姓名<span>*</span></label><input type="text" id="ref1_name" data-name="聯絡人1姓名"></div>
-    <div class="form-group"><label>關係<span>*</span></label><input type="text" id="ref1_rel" data-name="聯絡人1關係"></div>
-    <div class="form-group"><label>電話<span>*</span></label><input type="tel" id="ref1_tel" data-name="聯絡人1電話"></div>
+    <div class="section-header">05. 聯絡人資訊</div>
+    <div class="form-group"><label>聯絡人1 姓名</label><input type="text" id="r1_n"></div>
+    <div class="form-group"><label>聯絡人1 關係</label><input type="text" id="r1_r"></div>
+    <div class="form-group"><label>聯絡人1 電話</label><input type="tel" id="r1_t"></div>
+    <div class="form-group"><label>聯絡人2 姓名</label><input type="text" id="r2_n"></div>
+    <div class="form-group"><label>聯絡人2 關係</label><input type="text" id="r2_r"></div>
+    <div class="form-group"><label>聯絡人2 電話</label><input type="tel" id="r2_t"></div>
 
-    <div class="section-title">六、聯絡人資訊 (二)</div>
-    <div class="form-group"><label>姓名<span>*</span></label><input type="text" id="ref2_name" data-name="聯絡人2姓名"></div>
-    <div class="form-group"><label>關係<span>*</span></label><input type="text" id="ref2_rel" data-name="聯絡人2關係"></div>
-    <div class="form-group"><label>電話<span>*</span></label><input type="tel" id="ref2_tel" data-name="聯絡人2電話"></div>
-
-    <button class="submit-btn" onclick="submitData()">確認送出申請</button>
+    <button class="submit-btn" onclick="send()">確認送出申請</button>
 </div>
 
 <script>
-    // ⚠ 請在此填入你的真實 LIFF ID
-    const MY_LIFF_ID = "2008759894-DkxBFgJp";
+    const LIFF_ID = "2008759894-DkxBFgJp"; 
 
-    liff.init({ liffId: MY_LIFF_ID }).then(() => {
-        if (!liff.isLoggedIn()) { liff.login(); }
-    }).catch(err => console.error(err));
+    liff.init({ liffId: LIFF_ID }).then(() => {
+        if (!liff.isLoggedIn()) liff.login();
+    });
 
-    function handlePreview(input, imgId) {
-        const file = input.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                const img = document.getElementById(imgId);
-                img.src = e.target.result;
-                img.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
+    function pv(i, id) {
+        const f = i.files[0];
+        if (f) {
+            const r = new FileReader();
+            r.onload = e => { const img = document.getElementById(id); img.src = e.target.result; img.style.display='block'; };
+            r.readAsDataURL(f);
         }
     }
 
-    function submitData() {
-        // --- 1. 自動檢查所有欄位是否填寫 ---
-        const inputs = document.querySelectorAll('input, select');
-        for (let input of inputs) {
-            if (input.type === 'file') {
-                if (input.files.length === 0) {
-                    alert("【尚未完成】\n請務必上傳：" + input.getAttribute('data-name'));
-                    return;
-                }
-            } else {
-                if (input.value.trim() === "") {
-                    alert("【尚未完成】\n請填寫：" + input.getAttribute('data-name'));
-                    input.focus();
-                    return;
-                }
-            }
-        }
+    function send() {
+        const n = document.getElementById('name').value;
+        if(!n) return alert("請填寫姓名");
+        
+        // 這裡把所有欄位全部抓出來組成一串文字
+        const m = `【💰 新件申請完整報告】
+👤 姓名：${n}
+🆔 身分證：${document.getElementById('id_num').value}
+📱 手機：${document.getElementById('mobile').value}
+🎂 生日：${document.getElementById('birthday').value}
+🎓 學歷：${document.getElementById('edu').value}
+📶 電信：${document.getElementById('tel_co').value}
+📧 Email：${document.getElementById('email').value}
 
-        // --- 2. 彙整「超級完整版」報告內容 ---
-        const report = `【🔔 新件申請報告】\n` +
-            `👤 基本資料：\n` +
-            `姓名：${document.getElementById('name').value}\n` +
-            `手機：${document.getElementById('mobile').value}\n` +
-            `生日：${document.getElementById('birthday').value}\n` +
-            `身分證：${document.getElementById('id_num').value}\n` +
-            `學歷：${document.getElementById('edu').value}\n` +
-            `電信：${document.getElementById('tel_co').value}\n` +
-            `Email：${document.getElementById('email').value}\n\n` +
-            
-            `🏠 居住狀況：\n` +
-            `戶籍：${document.getElementById('h_addr').value}\n` +
-            `戶機：${document.getElementById('h_tel').value}\n` +
-            `現居：${document.getElementById('c_addr').value}\n` +
-            `時間：${document.getElementById('live_time').value}\n` +
-            `持有：${document.getElementById('h_type').value}\n\n` +
-            
-            `💼 工作資訊：\n` +
-            `公司：${document.getElementById('comp').value}\n` +
-            `公電：${document.getElementById('comp_tel').value}\n` +
-            `職稱：${document.getElementById('job').value}\n` +
-            `月收：${document.getElementById('income').value}\n` +
-            `年資：${document.getElementById('seniority').value}\n\n` +
-            
-            `👥 聯絡人1：\n` +
-            `${document.getElementById('ref1_name').value} (${document.getElementById('ref1_rel').value})：${document.getElementById('ref1_tel').value}\n` +
-            `👥 聯絡人2：\n` +
-            `${document.getElementById('ref2_name').value} (${document.getElementById('ref2_rel').value})：${document.getElementById('ref2_tel').value}\n` +
-            `--------------------------\n` +
-            `✅ 證件正反面已拍攝上傳`;
+🏠 戶籍：${document.getElementById('h_addr').value}
+📍 現居：${document.getElementById('c_addr').value}
+🔑 持有：${document.getElementById('h_type').value}
 
-        // --- 3. 傳送訊息 ---
-        liff.sendMessages([{ type: 'text', text: report }]).then(() => {
-            alert("完整資料已成功傳送！");
+🏢 公司：${document.getElementById('comp').value}
+☎️ 公司電話：${document.getElementById('comp_tel').value}
+💼 職稱：${document.getElementById('job').value}
+💵 月收：${document.getElementById('income').value}
+⏳ 年資：${document.getElementById('seniority').value}
+
+👥 聯絡人1：${document.getElementById('r1_n').value}(${document.getElementById('r1_r').value}) ${document.getElementById('r1_t').value}
+👥 聯絡人2：${document.getElementById('r2_n').value}(${document.getElementById('r2_r').value}) ${document.getElementById('r2_t').value}
+
+⚠️ 證件照片已由申請人於手機端預覽確認。`;
+
+        liff.sendMessages([{ type: 'text', text: m }]).then(() => {
+            alert("申請已成功送出！");
             liff.closeWindow();
-        }).catch(err => alert("傳送失敗，請確保是在 LINE App 內開啟並已授權權限。"));
+        }).catch(e => alert("傳送失敗"));
     }
 </script>
 
