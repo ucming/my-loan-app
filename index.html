@@ -3,33 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>資金服務正式申請表</title>
+    <title>資金顧問-遊戲化申請系統</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        :root { --p: #1a508b; --s: #28a745; --bg: #f4f7f9; }
-        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg); margin: 0; padding: 15px; line-height: 1.5; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: var(--p); border-bottom: 2px solid var(--p); padding-bottom: 10px; margin-bottom: 20px; }
+        :root { --p: #1a508b; --s: #28a745; --bg: #f4f7f9; --gold: #ffd700; }
+        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg); margin: 0; padding: 15px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        
+        /* 遊戲化進度儀表板 */
+        .rank-card { background: linear-gradient(135deg, #1a508b, #0d2a4a); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .rank-header { display: flex; justify-content: space-between; align-items: center; }
+        .rank-name { font-size: 22px; font-weight: bold; color: var(--gold); }
+        .score-info { font-size: 14px; opacity: 0.9; }
+        .progress-bg { background: rgba(255,255,255,0.2); height: 10px; border-radius: 5px; margin: 15px 0 5px; overflow: hidden; }
+        .progress-bar { background: var(--gold); height: 100%; width: 0%; transition: width 1s; box-shadow: 0 0 10px var(--gold); }
+        .rank-footer { font-size: 12px; display: flex; justify-content: space-between; }
+
         .sec { background: #eef2f7; color: var(--p); padding: 10px; border-left: 5px solid var(--p); font-weight: bold; margin-top: 25px; border-radius: 4px; }
         .g { margin-top: 15px; }
         label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #444; }
-        label span { color: red; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; background: white; }
-        .promo-box { background: #fff3cd; border: 1px dashed #ffc107; padding: 10px; border-radius: 8px; margin-top: 10px; color: #856404; font-size: 14px; }
-        .btn { background: var(--s); color: white; width: 100%; padding: 20px; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 40px; cursor: pointer; transition: 0.3s; }
-        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        
+        .promo-box { background: #fff9e6; border: 1px dashed #d4a017; padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 14px; line-height: 1.6; }
+        .btn { background: var(--s); color: white; width: 100%; padding: 20px; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; margin-top: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>資金服務正式申請表</h2>
+    <div class="rank-card">
+        <div class="rank-header">
+            <div id="rankLabel" class="rank-name">讀取中...</div>
+            <div class="score-info">積分：<span id="scoreVal">0</span> pt</div>
+        </div>
+        <div class="progress-bg"><div id="rankProgress" class="progress-bar"></div></div>
+        <div class="rank-footer">
+            <span id="rankNext">下一級還差 1000 分</span>
+            <span>核准現金加碼中</span>
+        </div>
+    </div>
 
-    <div class="sec">一、申請方案</div>
+    <h2 style="text-align:center; color:#1a508b;">正式貸款申請表單</h2>
+
+    <div class="sec">一、申請項目</div>
     <div class="g">
-        <label>欲申請項目<span>*</span></label>
+        <label>欲申請方案</label>
         <select id="v32">
-            <option value="">請選擇申請項目</option>
             <option value="商品分期">商品分期 (機車/手機/家電)</option>
             <option value="機車貸">機車貸 (原車融資)</option>
             <option value="汽車貸">汽車貸 (原車融資)</option>
@@ -37,128 +56,109 @@
         </select>
     </div>
 
-    <div class="sec">二、個人基本資料</div>
-    <div class="g"><label>全名<span>*</span></label><input type="text" id="v1" placeholder="例：陳小明"></div>
-    <div class="g"><label>LINE ID<span>*</span></label><input type="text" id="v2" placeholder="例：abc12345"></div>
-    <div class="g"><label>出生年月日<span>*</span></label><input type="text" id="v3" placeholder="例：80/01/01"></div>
-    <div class="g"><label>身分證字號<span>*</span></label><input type="text" id="v4" placeholder="例：A123456789"></div>
-    <div class="g"><label>最高學歷<span>*</span></label><input type="text" id="v5" placeholder="例：大學"></div>
-    <div class="g"><label>手機號碼<span>*</span></label><input type="tel" id="v6" placeholder="例：0912345678"></div>
-    <div class="g"><label>方便聯絡時間<span>*</span></label><input type="text" id="v7" placeholder="例：隨時或平日晚上"></div>
-    <div class="g"><label>電信業者<span>*</span></label><input type="text" id="v8" placeholder="例：中華電信"></div>
-    <div class="g"><label>常用 Email<span>*</span></label><input type="email" id="v9" placeholder="例：user@mail.com"></div>
+    <div class="sec">二、個人資料</div>
+    <div class="g"><label>全名</label><input type="text" id="v1" placeholder="例：陳小明"></div>
+    <div class="g"><label>LINE ID</label><input type="text" id="v2" placeholder="例：abc1234"></div>
+    <div class="g"><label>出生年月日</label><input type="text" id="v3" placeholder="例：80/01/01"></div>
+    <div class="g"><label>身分證字號</label><input type="text" id="v4" placeholder="例：A123456789"></div>
+    <div class="g"><label>最高學歷</label><input type="text" id="v5" placeholder="例：大學"></div>
+    <div class="g"><label>手機號碼</label><input type="tel" id="v6" placeholder="例：0912345678"></div>
+    <div class="g"><label>方便聯絡時間</label><input type="text" id="v7" placeholder="例：平日晚上"></div>
+    <div class="g"><label>電信業者</label><input type="text" id="v8" placeholder="例：中華電信"></div>
+    <div class="g"><label>常用 Email</label><input type="email" id="v9" placeholder="例：test@mail.com"></div>
 
-    <div class="sec">三、居住狀況</div>
-    <div class="g"><label>戶籍地址<span>*</span></label><input type="text" id="v10" placeholder="例：台北市信義區...號"></div>
-    <div class="g"><label>戶籍電話<span>*</span></label><input type="text" id="v11" placeholder="例：02-23456789 (無則填無)"></div>
-    <div class="g"><label>現居地址<span>*</span></label><input type="text" id="v12" placeholder="例：同戶籍地址"></div>
-    <div class="g"><label>現居電話<span>*</span></label><input type="text" id="v13" placeholder="無則填無"></div>
-    <div class="g"><label>居住時間<span>*</span></label><input type="text" id="v14" placeholder="例：5年"></div>
-    <div class="g">
-        <label>居住持有狀況<span>*</span></label>
-        <select id="v15">
-            <option value="">請選擇</option>
-            <option value="自有">自有</option>
-            <option value="租賃">租賃</option>
-            <option value="親友">親友</option>
-            <option value="宿舍">宿舍</option>
-        </select>
+    <div class="sec">三、居住與工作</div>
+    <div class="g"><label>戶籍地址</label><input type="text" id="v10"></div>
+    <div class="g"><label>戶籍電話</label><input type="text" id="v11"></div>
+    <div class="g"><label>現居地址</label><input type="text" id="v12"></div>
+    <div class="g"><label>現居電話</label><input type="text" id="v13"></div>
+    <div class="g"><label>居住時間</label><input type="text" id="v14"></div>
+    <div class="g"><label>居住狀況</label><select id="v15"><option value="自有">自有</option><option value="租賃">租賃</option><option value="親友">親友</option></select></div>
+    <div class="g"><label>公司名稱</label><input type="text" id="v16"></div>
+    <div class="g"><label>公司電話</label><input type="text" id="v17"></div>
+    <div class="g"><label>公司地址</label><input type="text" id="v18"></div>
+    <div class="g"><label>職稱</label><input type="text" id="v19"></div>
+    <div class="g"><label>月收入</label><input type="text" id="v20"></div>
+    <div class="g"><label>年資</label><input type="text" id="v21"></div>
+    <div class="g"><label>有無勞保薪轉</label><input type="text" id="v22"></div>
+
+    <div class="sec">四、聯絡人資訊</div>
+    <div class="g"><label>聯絡人1姓名</label><input type="text" id="v23"></div>
+    <div class="g"><label>聯絡人1關係</label><input type="text" id="v24"></div>
+    <div class="g"><label>聯絡人1電話</label><input type="tel" id="v25"></div>
+    <div class="g"><label>方便照會時間</label><input type="text" id="v26"></div>
+    <div class="g"><label>聯絡人2姓名</label><input type="text" id="v27"></div>
+    <div class="g"><label>聯絡人2關係</label><input type="text" id="v28"></div>
+    <div class="g"><label>聯絡人2電話</label><input type="tel" id="v29"></div>
+    <div class="g"><label>方便照會時間</label><input type="text" id="v30"></div>
+
+    <div class="sec">五、等級晉升與推薦獎金</div>
+    <div class="promo-box">
+        <b>⭐ 當前等級回饋說明：</b><br>
+        <span id="rewardText">載入中...</span><br>
+        <small>※ 每日簽到 +5 分，自己辦 +200 分，推薦核准 +500 分！</small>
     </div>
+    <div class="g"><label>推薦人姓名</label><input type="text" id="v31" placeholder="無則填無"></div>
+    <div class="g"><label>推薦人電話</label><input type="tel" id="v33" placeholder="無則填無"></div>
 
-    <div class="sec">四、工作資訊</div>
-    <div class="g"><label>公司名稱<span>*</span></label><input type="text" id="v16" placeholder="例：○○工業股份有限公司"></div>
-    <div class="g"><label>公司電話<span>*</span></label><input type="text" id="v17" placeholder="例：02-88887777"></div>
-    <div class="g"><label>公司地址<span>*</span></label><input type="text" id="v18" placeholder="例：桃園市中壢區...號"></div>
-    <div class="g"><label>職稱<span>*</span></label><input type="text" id="v19" placeholder="例：技術員"></div>
-    <div class="g"><label>月收入<span>*</span></label><input type="text" id="v20" placeholder="例：35000"></div>
-    <div class="g"><label>年資<span>*</span></label><input type="text" id="v21" placeholder="例：1年半"></div>
-    <div class="g"><label>有無勞保薪轉<span>*</span></label><input type="text" id="v22" placeholder="例：皆有"></div>
-
-    <div class="sec">五、聯絡人資訊</div>
-    <div class="g"><label>聯絡人1姓名<span>*</span></label><input type="text" id="v23" placeholder="例：張志明"></div>
-    <div class="g"><label>聯絡人1關係<span>*</span></label><input type="text" id="v24" placeholder="例：父子"></div>
-    <div class="g"><label>聯絡人1電話<span>*</span></label><input type="tel" id="v25" placeholder="例：0911222333"></div>
-    <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v26" placeholder="例：不限"></div>
-    <div class="g"><label>聯絡人2姓名<span>*</span></label><input type="text" id="v27" placeholder="例：李大華"></div>
-    <div class="g"><label>聯絡人2關係<span>*</span></label><input type="text" id="v28" placeholder="例：朋友"></div>
-    <div class="g"><label>聯絡人2電話<span>*</span></label><input type="tel" id="v29" placeholder="例：0988777666"></div>
-    <div class="g"><label>方便照會時間<span>*</span></label><input type="text" id="v30" placeholder="例：晚上七點後"></div>
-
-    <div class="sec">六、推薦回饋 (核准送現金)</div>
-    <div class="g">
-        <label>推薦人姓名/電話 (若無則填無)</label>
-        <input type="text" id="v31" placeholder="填寫推薦人資訊">
-        <div class="promo-box">💰 溫馨提示：本件核准成功後，推薦人可領取 1,000 元現金回饋！</div>
-    </div>
-
-    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handleFileSelected()">
-
-    <button id="submitBtn" class="btn" onclick="handleSubmit()">確認送出並開啟拍照</button>
+    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="finishAction()">
+    <button id="submitBtn" class="btn" onclick="handleSubmit()">確認送出並領取積分</button>
 </div>
 
 <script>
     const LIFF_ID = "2008759894-DkxBFgJp"; 
+    let score = parseInt(localStorage.getItem('user_loan_score')) || 0;
 
     liff.init({ liffId: LIFF_ID }).then(() => {
-        if (!liff.isLoggedIn()) {
-            liff.login();
-        }
-    }).catch((err) => { console.log('LIFF 初始化失敗', err); });
+        if (!liff.isLoggedIn()) liff.login();
+        handleDailyCheck();
+        updateDisplay();
+    });
 
-    async function handleSubmit() {
-        const btn = document.getElementById('submitBtn');
-        const fields = [
-            {id:'v32', n:'申請方案'}, {id:'v1', n:'全名'}, {id:'v2', n:'LINE ID'}, {id:'v3', n:'生日'}, {id:'v4', n:'身分證'},
-            {id:'v5', n:'學歷'}, {id:'v6', n:'手機'}, {id:'v7', n:'聯絡時間'}, {id:'v8', n:'電信'}, {id:'v9', n:'Email'},
-            {id:'v10', n:'戶籍地址'}, {id:'v11', n:'戶籍電話'}, {id:'v12', n:'現居地址'}, {id:'v13', n:'現居電話'},
-            {id:'v14', n:'居住時間'}, {id:'v15', n:'產權'}, {id:'v16', n:'公司名稱'}, {id:'v17', n:'公司電話'},
-            {id:'v18', n:'公司地址'}, {id:'v19', n:'職稱'}, {id:'v20', n:'月收入'}, {id:'v21', n:'年資'},
-            {id:'v22', n:'勞保薪轉'}, {id:'v23', n:'聯1姓名'}, {id:'v24', n:'聯1關係'}, {id:'v25', n:'聯1電話'},
-            {id:'v26', n:'聯1時間'}, {id:'v27', n:'聯2姓名'}, {id:'v28', n:'聯2關係'}, {id:'v29', n:'聯2電話'},
-            {id:'v30', n:'聯2時間'}, {id:'v31', n:'推薦人資訊'}
-        ];
-
-        // 必填檢查 (推薦人除外)
-        for (let f of fields) {
-            if (f.id === 'v31') continue; 
-            const val = document.getElementById(f.id).value;
-            if (!val) {
-                alert("「" + f.n + "」尚未填寫！");
-                document.getElementById(f.id).focus();
-                return;
-            }
-        }
-
-        btn.disabled = true;
-        btn.innerText = "資料傳送中，請稍候...";
-
-        // 組合 LINE 訊息
-        let msg = "【新件貸款正式申請單】\n";
-        fields.forEach(f => {
-            const val = document.getElementById(f.id).value || "無";
-            msg += `${f.n}：${val}\n`;
-        });
-        msg += "\n⚠️ 請接著點選照片上傳身分證件完成程序！";
-
-        try {
-            // 1. 先送出文字訊息
-            await liff.sendMessages([{ type: 'text', text: msg }]);
-            
-            // 2. 成功後開啟拍照/相簿選單
-            document.getElementById('photoInput').click();
-            
-            // 3. 更改按鈕狀態提示使用者
-            btn.innerText = "請選取照片完成申請";
-        } catch (error) {
-            alert("傳送失敗，請確保在 LINE 內開啟表單：" + error);
-            btn.disabled = false;
-            btn.innerText = "確認送出並開啟拍照";
+    function handleDailyCheck() {
+        const today = new Date().toLocaleDateString();
+        if (localStorage.getItem('last_check') !== today) {
+            score += 5;
+            localStorage.setItem('user_loan_score', score);
+            localStorage.setItem('last_check', today);
+            alert("📅 今日簽到成功！積分 +5 pt");
         }
     }
 
-    function handleFileSelected() {
-        // 當使用者選完照片後觸發
-        alert("資料與照片已就緒，即將關閉視窗。請記得在對話框傳送您的證件照片！");
+    function updateDisplay() {
+        let rank = "青銅會員", next = 1000 - score, percent = (score/1000)*100, reward = "推薦領 $1,000 / 自己辦領 $500";
+        if (score >= 3000) { rank="鑽石會員"; percent=100; next=0; reward="推薦領 $1,500 / 自己辦領 $1,000"; }
+        else if (score >= 1000) { rank="白金會員"; percent=((score-1000)/2000)*100; next=3000-score; reward="推薦領 $1,200 / 自己辦領 $800"; }
+        
+        document.getElementById('rankLabel').innerText = rank;
+        document.getElementById('scoreVal').innerText = score;
+        document.getElementById('rankProgress').style.width = percent + "%";
+        document.getElementById('rankNext').innerText = next > 0 ? "距離下一級還差 " + next + " 分" : "已達最高等級";
+        document.getElementById('rewardText').innerText = "回饋金： " + reward;
+    }
+
+    async function handleSubmit() {
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = "資料處理中...";
+
+        let msg = `【新件申請】\n等級：${document.getElementById('rankLabel').innerText}\n`;
+        const ids = ['v32','v1','v2','v3','v4','v5','v6','v7','v8','v9','v10','v11','v12','v13','v14','v15','v16','v17','v18','v19','v20','v21','v22','v23','v24','v25','v26','v27','v28','v29','v30','v31','v33'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) msg += `${el.previousElementSibling.innerText}：${el.value || '無'}\n`;
+        });
+
+        try {
+            await liff.sendMessages([{ type: 'text', text: msg }]);
+            score += 200; // 自己辦成功加200分
+            localStorage.setItem('user_loan_score', score);
+            document.getElementById('photoInput').click();
+        } catch (e) { alert("傳送失敗"); btn.disabled = false; }
+    }
+
+    function finishAction() {
+        alert("🎉 申請已送出！積分已同步更新。核准後將依等級發放回饋金！");
         liff.closeWindow();
     }
 </script>
